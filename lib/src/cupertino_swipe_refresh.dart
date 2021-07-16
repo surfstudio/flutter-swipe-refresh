@@ -34,7 +34,7 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
     bool shrinkWrap = false,
     this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
     this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
-    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
+    this.indicatorBuilder,
     //FIXME add parameter to CustomScrollView, when fix it in Flutter
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
@@ -58,7 +58,7 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
 
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
+  final RefreshControlIndicatorBuilder? indicatorBuilder;
   final double? cacheExtent;
 
   @override
