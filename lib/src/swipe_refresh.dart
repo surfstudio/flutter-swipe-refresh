@@ -170,9 +170,9 @@ class SwipeRefresh extends StatelessWidget {
           physics: physics,
         );
 
-  /// Crete SwipeRefresh as common link
+  /// Create SwipeRefresh as common link
   /// remove some conflicts between ScrollControllers when ListView added into
-  /// SwipeRefresh (remove need to add extra ListView)
+  /// SwipeRefresh (remove need to add extra ListView).
   factory SwipeRefresh.builder({
     required IndexedWidgetBuilder itemBuilder,
     required int itemCount,
