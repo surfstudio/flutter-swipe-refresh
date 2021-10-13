@@ -17,8 +17,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
 
-// ignore_for_file: avoid-returning-widgets
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -57,11 +55,11 @@ class _MainPageState extends State<MainPage> {
           padding: const EdgeInsets.only(top: 25),
           child: Column(
             children: [
-              TabBar(
+              const TabBar(
                 tabs: [
-                  _buildTab(SwipeRefreshStyle.material),
-                  _buildTab(SwipeRefreshStyle.cupertino),
-                  _buildTab(SwipeRefreshStyle.builder),
+                  _TabWidget(style: SwipeRefreshStyle.material),
+                  _TabWidget(style: SwipeRefreshStyle.cupertino),
+                  _TabWidget(style: SwipeRefreshStyle.builder),
                 ],
               ),
               Expanded(
@@ -71,13 +69,17 @@ class _MainPageState extends State<MainPage> {
                       stateStream: _stream,
                       onRefresh: _refresh,
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      children: _buildExampleBody(SwipeRefreshStyle.material),
+                      children: const [
+                        _ExampleBodyWidget(style: SwipeRefreshStyle.material),
+                      ],
                     ),
                     SwipeRefresh.cupertino(
                       stateStream: _stream,
                       onRefresh: _refresh,
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      children: _buildExampleBody(SwipeRefreshStyle.cupertino),
+                      children: const [
+                        _ExampleBodyWidget(style: SwipeRefreshStyle.cupertino),
+                      ],
                     ),
                     SwipeRefresh.builder(
                       stateStream: _stream,
@@ -114,69 +116,85 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 
-  Widget _buildTab(SwipeRefreshStyle style) {
-    var color = _getColor(style);
-    color = color.withOpacity(.5);
+  Future<void> _refresh() async {
+    await Future<void>.delayed(const Duration(seconds: 3));
+    // when all needed is done change state
+    _controller.sink.add(SwipeRefreshState.hidden);
+  }
+}
+
+class _TabWidget extends StatelessWidget {
+  final SwipeRefreshStyle style;
+
+  const _TabWidget({
+    required this.style,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       child: SizedBox(
         height: 100,
         child: Center(
           child: Text(
             _getText(style),
-            style: TextStyle(color: color),
+            style: TextStyle(color: _getColor(style).withOpacity(0.5)),
           ),
         ),
       ),
     );
   }
+}
 
-  List<Widget> _buildExampleBody(SwipeRefreshStyle style) {
-    final isMaterial = style == SwipeRefreshStyle.material;
-    final color = _getColor(style);
-    return [
-      Container(
-        color: color,
-        height: 100,
-        child: Center(
-          child: Text(
-            isMaterial ? 'Material example' : 'Cupertino example',
-            style: const TextStyle(color: white),
-          ),
+class _ExampleBodyWidget extends StatelessWidget {
+  final SwipeRefreshStyle style;
+
+  const _ExampleBodyWidget({
+    required this.style,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: _getColor(style),
+      height: 100,
+      child: Center(
+        child: Text(
+          style == SwipeRefreshStyle.material
+              ? 'Material example'
+              : 'Cupertino example',
+          style: const TextStyle(color: white),
         ),
       ),
-    ];
+    );
   }
+}
 
-  Color _getColor(SwipeRefreshStyle style) {
-    switch (style) {
-      case SwipeRefreshStyle.material:
-        return red;
-      case SwipeRefreshStyle.cupertino:
-        return blue;
-      case SwipeRefreshStyle.builder:
-        return green;
-      default:
-        return black;
-    }
+Color _getColor(SwipeRefreshStyle style) {
+  switch (style) {
+    case SwipeRefreshStyle.material:
+      return red;
+    case SwipeRefreshStyle.cupertino:
+      return blue;
+    case SwipeRefreshStyle.builder:
+      return green;
+    default:
+      return black;
   }
+}
 
-  String _getText(SwipeRefreshStyle style) {
-    switch (style) {
-      case SwipeRefreshStyle.material:
-        return 'Material';
-      case SwipeRefreshStyle.cupertino:
-        return 'Cupertino';
-      case SwipeRefreshStyle.builder:
-        return 'Builder';
-      default:
-        return 'SipeRefresh';
-    }
-  }
-
-  Future<void> _refresh() async {
-    await Future<void>.delayed(const Duration(seconds: 3));
-    // when all needed is done change state
-    _controller.sink.add(SwipeRefreshState.hidden);
+String _getText(SwipeRefreshStyle style) {
+  switch (style) {
+    case SwipeRefreshStyle.material:
+      return 'Material';
+    case SwipeRefreshStyle.cupertino:
+      return 'Cupertino';
+    case SwipeRefreshStyle.builder:
+      return 'Builder';
+    default:
+      return 'SwipeRefresh';
   }
 }
 
