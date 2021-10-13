@@ -1,7 +1,7 @@
 # Swipe Refresh
 
-[![Build Status](https://shields.io/github/workflow/status/surfstudio/SurfGear/build?logo=github&logoColor=white)](https://github.com/surfstudio/SurfGear/tree/main/packages/swipe_refresh)
-[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/SurfGear?flag=swipe_refresh&logo=codecov&logoColor=white)](https://codecov.io/gh/surfstudio/SurfGear)
+[![Build Status](https://shields.io/github/workflow/status/surfstudio/SurfGear/build?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
+[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/SurfGear?flag=swipe_refresh&logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-swipe-refresh)
 [![Pub Version](https://img.shields.io/pub/v/swipe_refresh?logo=dart&logoColor=white)](https://pub.dev/packages/swipe_refresh)
 [![Pub Likes](https://badgen.net/pub/likes/swipe_refresh)](https://pub.dev/packages/swipe_refresh)
 [![Pub popularity](https://badgen.net/pub/popularity/swipe_refresh)](https://pub.dev/packages/swipe_refresh/score)
@@ -31,7 +31,7 @@ Add `swipe_refresh` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  swipe_refresh: ^1.0.0
+  swipe_refresh: ^1.0.1
 ```
 
 You can use both `stable` and `dev` versions of the package listed above in the badges bar.
@@ -42,11 +42,11 @@ All notable changes to this project will be documented in [this file](./CHANGELO
 
 ## Issues
 
-For issues, file directly in the Issues section.
+For issues, file directly in the [Issues](https://github.com/surfstudio/flutter-swipe-refresh/issues) section.
 
 ## Contribute
 
-If you would like to contribute to the package (e.g. by improving the documentation, solving a bug or adding a cool new feature), please review our [contribution guide](../../CONTRIBUTING.md) first and send us your pull request.
+If you would like to contribute to the package (e.g. by improving the documentation, solving a bug or adding a cool new feature), please review our [contribution guide](./CONTRIBUTING.md) first and send us your pull request.
 
 Your PRs are always welcome.
 
