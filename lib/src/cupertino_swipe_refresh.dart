@@ -100,7 +100,7 @@ class _CupertinoSwipeRefreshState
           left: widget.padding == null,
           right: widget.padding == null,
           top: widget.padding == null,
-          sliver: _ListChildren(
+          sliver: _ListChildrenWidget(
             children: children,
             padding: widget.padding,
             childrenDelegate: widget.childrenDelegate,
@@ -125,12 +125,12 @@ class _CupertinoSwipeRefreshState
   }
 }
 
-class _ListChildren extends StatelessWidget {
+class _ListChildrenWidget extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsets? padding;
   final SliverChildDelegate? childrenDelegate;
 
-  const _ListChildren({
+  const _ListChildrenWidget({
     required this.children,
     Key? key,
     this.padding,
