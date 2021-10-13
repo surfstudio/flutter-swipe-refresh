@@ -88,12 +88,12 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     super.dispose();
   }
 
- @protected
- Widget buildRefresher(
-   Key key,
-   List<Widget> children,
-   Future<void> Function() onRefresh,
- );
+  @protected
+  Widget buildRefresher(
+    Key key,
+    List<Widget> children,
+    Future<void> Function() onRefresh,
+  );
 
   @protected
   void onUpdateState(SwipeRefreshState state);
