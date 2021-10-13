@@ -19,6 +19,17 @@ import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
 /// Base refresh indicator widget.
 abstract class SwipeRefreshBase extends StatefulWidget {
+  final List<Widget>? children;
+  final VoidCallback onRefresh;
+  final SwipeRefreshState? initState;
+  final Stream<SwipeRefreshState> stateStream;
+  final ScrollController? scrollController;
+  final SliverChildDelegate? childrenDelegate;
+  final EdgeInsets? padding;
+  final bool shrinkWrap;
+  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
+  final ScrollPhysics? physics;
+
   const SwipeRefreshBase({
     required this.stateStream,
     required this.onRefresh,
@@ -35,17 +46,6 @@ abstract class SwipeRefreshBase extends StatefulWidget {
             (children != null || childrenDelegate != null)),
         super(key: key);
 
-  final List<Widget>? children;
-  final VoidCallback onRefresh;
-  final SwipeRefreshState? initState;
-  final Stream<SwipeRefreshState> stateStream;
-  final ScrollController? scrollController;
-  final SliverChildDelegate? childrenDelegate;
-  final EdgeInsets? padding;
-  final bool shrinkWrap;
-  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
-  final ScrollPhysics? physics;
-
   @override
   @protected
   // ignore: no_logic_in_create_state
@@ -55,9 +55,11 @@ abstract class SwipeRefreshBase extends StatefulWidget {
 abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     extends State<T> {
   @protected
-  Completer<void>? completer;
-  @protected
   final GlobalKey refreshKey = GlobalKey();
+
+  @protected
+  Completer<void>? completer;
+
   StreamSubscription<SwipeRefreshState>? _stateSubscription;
 
   SwipeRefreshState _currentState = SwipeRefreshState.hidden;
@@ -75,19 +77,34 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid-returning-widgets
     return buildRefresher(refreshKey, widget.children ?? [], _onRefresh);
   }
 
-  // ignore: avoid-returning-widgets
-  @protected
-  Widget buildRefresher(
-    Key key,
-    List<Widget> children,
-    Future<void> Function() onRefresh,
-  );
+  @override
+  void dispose() {
+    _stateSubscription?.cancel();
+
+    super.dispose();
+  }
+
+ @protected
+ Widget buildRefresher(
+   Key key,
+   List<Widget> children,
+   Future<void> Function() onRefresh,
+ );
 
   @protected
   void onUpdateState(SwipeRefreshState state);
+
+  @protected
+  Future<void> _onRefresh() {
+    _currentState = SwipeRefreshState.loading;
+    widget.onRefresh();
+    completer = Completer<void>();
+    return completer!.future;
+  }
 
   void _updateState(SwipeRefreshState newState) {
     if (_currentState != newState) {
@@ -99,20 +116,5 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
         },
       );
     }
-  }
-
-  @protected
-  Future<void> _onRefresh() {
-    _currentState = SwipeRefreshState.loading;
-    widget.onRefresh();
-    completer = Completer<void>();
-    return completer!.future;
-  }
-
-  @override
-  void dispose() {
-    _stateSubscription?.cancel();
-
-    super.dispose();
   }
 }

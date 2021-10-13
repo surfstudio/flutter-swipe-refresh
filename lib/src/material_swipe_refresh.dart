@@ -19,10 +19,11 @@ import 'package:flutter/widgets.dart';
 import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
-// ignore_for_file: avoid-returning-widgets
-
 /// Refresh indicator widget with Material Design style.
 class MaterialSwipeRefresh extends SwipeRefreshBase {
+  final Color? indicatorColor;
+  final Color backgroundColor;
+
   const MaterialSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
@@ -51,9 +52,6 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
         );
-
-  final Color? indicatorColor;
-  final Color backgroundColor;
 
   @override
   _MaterialSwipeRefreshState createState() => _MaterialSwipeRefreshState();

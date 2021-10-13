@@ -18,10 +18,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
-// ignore_for_file: avoid-returning-widgets
-
 /// Refresh indicator widget with Cupertino style.
 class CupertinoSwipeRefresh extends SwipeRefreshBase {
+  static const double defaultRefreshTriggerPullDistance = 100.0;
+  static const double defaultRefreshIndicatorExtent = 60.0;
+
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
+  final RefreshControlIndicatorBuilder indicatorBuilder;
+
   const CupertinoSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
@@ -35,7 +40,6 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
     this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
     this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
     this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
-    //FIXME add parameter to CustomScrollView, when fix it in Flutter
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
   }) : super(
@@ -52,13 +56,6 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
           physics: physics,
         );
 
-  static const double defaultRefreshTriggerPullDistance = 100.0;
-  static const double defaultRefreshIndicatorExtent = 60.0;
-
-  final double refreshTriggerPullDistance;
-  final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
-
   @override
   // ignore: no_logic_in_create_state
   SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState(
@@ -68,11 +65,11 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
 
 class _CupertinoSwipeRefreshState
     extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
+  final ScrollController _scrollController;
+
   _CupertinoSwipeRefreshState(
     ScrollController? scrollController,
   ) : _scrollController = scrollController ?? ScrollController();
-
-  final ScrollController _scrollController;
 
   @override
   Widget buildRefresher(
@@ -83,6 +80,8 @@ class _CupertinoSwipeRefreshState
     return CustomScrollView(
       shrinkWrap: widget.shrinkWrap,
       controller: _scrollController,
+      keyboardDismissBehavior: widget.keyboardDismissBehavior ??
+          ScrollViewKeyboardDismissBehavior.onDrag,
       physics: widget.physics == null
           ? const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -101,7 +100,11 @@ class _CupertinoSwipeRefreshState
           left: widget.padding == null,
           right: widget.padding == null,
           top: widget.padding == null,
-          sliver: _buildList(children),
+          sliver: _ListChildren(
+            children: children,
+            padding: widget.padding,
+            childrenDelegate: widget.childrenDelegate,
+          ),
         ),
       ],
     );
@@ -120,13 +123,27 @@ class _CupertinoSwipeRefreshState
       }
     }
   }
+}
 
-  Widget _buildList(List<Widget> children) {
-    if (widget.padding != null) {
+class _ListChildren extends StatelessWidget {
+  final List<Widget> children;
+  final EdgeInsets? padding;
+  final SliverChildDelegate? childrenDelegate;
+
+  const _ListChildren({
+    required this.children,
+    Key? key,
+    this.padding,
+    this.childrenDelegate,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (padding != null) {
       return SliverPadding(
-        padding: widget.padding!,
+        padding: padding!,
         sliver: SliverList(
-          delegate: widget.childrenDelegate ??
+          delegate: childrenDelegate ??
               SliverChildListDelegate(
                 children,
               ),
@@ -134,7 +151,7 @@ class _CupertinoSwipeRefreshState
       );
     }
     return SliverList(
-      delegate: widget.childrenDelegate ??
+      delegate: childrenDelegate ??
           SliverChildListDelegate(
             children,
           ),
