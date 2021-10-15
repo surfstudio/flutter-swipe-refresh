@@ -14,6 +14,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
@@ -21,81 +22,133 @@ import 'package:swipe_refresh/swipe_refresh.dart';
 import 'test_utils.dart';
 
 void main() {
-  group('SwipeRefresh.cupertino', () {
-    late StreamController<SwipeRefreshState> _controller;
-    late Stream<SwipeRefreshState> stream;
+  late StreamController<SwipeRefreshState> _streamController;
+  late Stream<SwipeRefreshState> stream;
 
-    setUp(() {
-      _controller = StreamController<SwipeRefreshState>.broadcast();
-      stream = _controller.stream;
-    });
+  setUp(() {
+    _streamController = StreamController<SwipeRefreshState>.broadcast();
+    stream = _streamController.stream;
+  });
 
-    tearDown(() async {
-      await _controller.close();
-    });
+  tearDown(() async {
+    await _streamController.close();
+  });
 
-    Future<void> _onRefresh() async {
-      await Future<void>.delayed(const Duration(seconds: 3));
+  Future<void> _onRefresh() async {
+    _streamController.sink.add(SwipeRefreshState.loading);
 
-      _controller.sink.add(SwipeRefreshState.hidden);
-    }
+    await Future<void>.delayed(const Duration(seconds: 3));
 
-    group("doesn't break", () {
-      testWidgets('with children as argument', (tester) async {
-        final testWidget = makeTestableWidget(
-          SwipeRefresh.cupertino(
-            stateStream: stream,
-            onRefresh: _onRefresh,
-            children: Colors.primaries
-                .map(
-                  (e) => Container(
-                    color: e,
-                    height: 100,
-                  ),
-                )
-                .toList(),
-          ),
-        );
+    _streamController.sink.add(SwipeRefreshState.hidden);
+  }
 
-        await tester.pumpWidget(testWidget);
-      });
-    });
+  final listColors = [
+    Colors.blue,
+    Colors.green,
+    Colors.red,
+    Colors.amber,
+  ];
 
-    testWidgets('emits hidden state on drag after 3 seconds', (tester) async {
-      final events = <SwipeRefreshState>[];
-
-      stream.listen(expectAsync1<void, SwipeRefreshState>(events.add));
-
-      final testWidget = makeTestableWidget(
+  testWidgets(
+    'SwipeRefresh.cupertino widget with children as argument does not break',
+    (tester) async {
+      final cupertinoSwipeRefresh = makeTestableWidget(
         SwipeRefresh.cupertino(
           stateStream: stream,
           onRefresh: _onRefresh,
-          children: const [
-            SizedBox(height: 100),
-            SizedBox(height: 100),
-          ],
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
         ),
       );
 
-      await tester.pumpWidget(testWidget);
+      await tester.pumpWidget(cupertinoSwipeRefresh);
+
+      expect(() => cupertinoSwipeRefresh, returnsNormally);
+
+      expect(find.byType(Container), findsNWidgets(4));
+
+      expect(find.byType(CupertinoSwipeRefresh), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'When drag down enough, the refresh should start with the correct statuses',
+    (tester) async {
+      final events = <SwipeRefreshState>[];
+
+      stream.listen(events.add);
+
+      final cupertinoSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.cupertino(
+          stateStream: stream,
+          onRefresh: _onRefresh,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
+        ),
+      );
+
+      await tester.pumpWidget(cupertinoSwipeRefresh);
 
       expect(events, isEmpty);
 
-      /// drag is not enouth to trugger refresh
-      await tester.drag(find.byType(SwipeRefresh), const Offset(0, 100));
-
-      expect(events, isEmpty);
-
-      await tester.drag(find.byType(SwipeRefresh), const Offset(0, 300));
+      await tester.drag(
+        find.byType(SwipeRefresh),
+        const Offset(0, 300),
+        touchSlopY: 0,
+      );
 
       await tester.pump(const Duration(seconds: 1));
 
-      /// event must reveal after 3 seconds
-      expect(events, isEmpty);
+      expect(events, equals([SwipeRefreshState.loading]));
 
       await tester.pump(const Duration(seconds: 3));
 
-      expect(events, equals([SwipeRefreshState.hidden]));
-    });
-  });
+      expect(events.last, equals(SwipeRefreshState.hidden));
+    },
+  );
+
+  testWidgets(
+    'When drag down is not enough to trigger an update the update should not be',
+    (tester) async {
+      final events = <SwipeRefreshState>[];
+
+      stream.listen(events.add);
+
+      final cupertinoSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.cupertino(
+          stateStream: stream,
+          onRefresh: _onRefresh,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
+        ),
+      );
+
+      await tester.pumpWidget(cupertinoSwipeRefresh);
+
+      expect(events, isEmpty);
+
+      await tester.drag(find.byType(SwipeRefresh), const Offset(0.0, 50.0));
+      await tester.pump();
+
+      expect(events, isEmpty);
+    },
+  );
 }

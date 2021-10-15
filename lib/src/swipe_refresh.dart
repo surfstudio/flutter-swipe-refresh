@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:swipe_refresh/src/cupertino_swipe_refresh.dart';
 import 'package:swipe_refresh/src/material_swipe_refresh.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 import 'package:swipe_refresh/src/swipe_refresh_style.dart';
+import 'package:swipe_refresh/utills/platform_wrapper.dart';
 
 /// Refresh indicator widget.
 ///
@@ -44,8 +43,9 @@ class SwipeRefresh extends StatelessWidget {
   final bool shrinkWrap;
   final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
   final ScrollPhysics? physics;
+  final PlatformWrapper _platform;
 
-  const SwipeRefresh(
+  SwipeRefresh(
     this.style, {
     required this.stateStream,
     required this.onRefresh,
@@ -63,6 +63,7 @@ class SwipeRefresh extends StatelessWidget {
     double? refreshTriggerPullDistance,
     double? refreshIndicatorExtent,
     RefreshControlIndicatorBuilder? indicatorBuilder,
+    PlatformWrapper? platform,
   })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
         refreshTriggerPullDistance = refreshTriggerPullDistance ??
             CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
@@ -70,10 +71,11 @@ class SwipeRefresh extends StatelessWidget {
             CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
         indicatorBuilder = indicatorBuilder ??
             CupertinoSliverRefreshControl.buildRefreshIndicator,
+        _platform = platform ?? PlatformWrapper(),
         super(key: key);
 
   /// Create refresh indicator adaptive to platform.
-  const SwipeRefresh.adaptive({
+  SwipeRefresh.adaptive({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     required List<Widget> children,
@@ -89,6 +91,7 @@ class SwipeRefresh extends StatelessWidget {
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    PlatformWrapper? platform,
   }) : this(
           SwipeRefreshStyle.adaptive,
           key: key,
@@ -106,10 +109,11 @@ class SwipeRefresh extends StatelessWidget {
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
+          platform: platform,
         );
 
   /// Create refresh indicator with Material Design style.
-  const SwipeRefresh.material({
+  SwipeRefresh.material({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     required List<Widget> children,
@@ -139,7 +143,7 @@ class SwipeRefresh extends StatelessWidget {
         );
 
   /// Create refresh indicator with Cupertino style.
-  const SwipeRefresh.cupertino({
+  SwipeRefresh.cupertino({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     required List<Widget> children,
@@ -190,6 +194,7 @@ class SwipeRefresh extends StatelessWidget {
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    PlatformWrapper? platform,
   }) {
     return SwipeRefresh(
       SwipeRefreshStyle.adaptive,
@@ -211,6 +216,7 @@ class SwipeRefresh extends StatelessWidget {
         itemBuilder,
         childCount: itemCount,
       ),
+      platform: platform,
     );
   }
 
@@ -251,7 +257,7 @@ class SwipeRefresh extends StatelessWidget {
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
-        if (Platform.isAndroid) {
+        if (_platform.getPlatform() == TargetPlatform.android) {
           return MaterialSwipeRefresh(
             key: key,
             childrenDelegate: childrenDelegate,
@@ -267,7 +273,7 @@ class SwipeRefresh extends StatelessWidget {
             physics: physics,
             children: children,
           );
-        } else if (Platform.isIOS) {
+        } else if (_platform.getPlatform() == TargetPlatform.iOS) {
           return CupertinoSwipeRefresh(
             key: key,
             childrenDelegate: childrenDelegate,

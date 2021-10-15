@@ -16,17 +16,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
+import 'package:swipe_refresh/utills/platform_wrapper.dart';
 
 import 'test_utils.dart';
 
 void main() {
   late StreamController<SwipeRefreshState> _controller;
   late Stream<SwipeRefreshState> stream;
+  late MockPlatformWrapper platformWrapper;
 
   setUp(() {
     _controller = StreamController<SwipeRefreshState>.broadcast();
     stream = _controller.stream;
+
+    platformWrapper = MockPlatformWrapper();
   });
 
   tearDown(() async {
@@ -34,8 +39,6 @@ void main() {
   });
 
   Future<void> _onRefresh() async {
-    _controller.sink.add(SwipeRefreshState.loading);
-
     await Future<void>.delayed(const Duration(seconds: 3));
 
     _controller.sink.add(SwipeRefreshState.hidden);
@@ -49,10 +52,10 @@ void main() {
   ];
 
   testWidgets(
-    'SwipeRefresh.material widget with children as argument does not break',
+    'When call SwipeRefresh.adaptive not on android or iOS platform should build normally with one Container',
     (tester) async {
-      final materialSwipeRefresh = makeTestableWidget(
-        SwipeRefresh.material(
+      final adaptiveSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.adaptive(
           stateStream: stream,
           onRefresh: _onRefresh,
           children: listColors
@@ -63,93 +66,77 @@ void main() {
                 ),
               )
               .toList(),
+          platform: platformWrapper,
         ),
       );
 
-      await tester.pumpWidget(materialSwipeRefresh);
+      await tester.pumpWidget(adaptiveSwipeRefresh);
 
-      expect(() => materialSwipeRefresh, returnsNormally);
+      expect(() => adaptiveSwipeRefresh, returnsNormally);
 
-      expect(find.byType(Container), findsNWidgets(4));
+      expect(find.byType(Container), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'When call SwipeRefresh.adaptive on android platform should build MaterialSwipeRefresh',
+    (tester) async {
+      when(() => platformWrapper.getPlatform())
+          .thenReturn(TargetPlatform.android);
+
+      final adaptiveSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.adaptive(
+          stateStream: stream,
+          onRefresh: _onRefresh,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
+          platform: platformWrapper,
+        ),
+      );
+
+      await tester.pumpWidget(adaptiveSwipeRefresh);
+
+      expect(() => adaptiveSwipeRefresh, returnsNormally);
 
       expect(find.byType(MaterialSwipeRefresh), findsOneWidget);
     },
   );
 
   testWidgets(
-    'When drag down enough, the refresh should start with the correct statuses',
-    (tester) async {
-      final events = <SwipeRefreshState>[];
+    'When call SwipeRefresh.adaptive on iOS platform should build CupertinoSwipeRefresh',
+        (tester) async {
+      when(() => platformWrapper.getPlatform())
+          .thenReturn(TargetPlatform.iOS);
 
-      stream.listen(events.add);
-
-      final materialSwipeRefresh = makeTestableWidget(
-        SwipeRefresh.material(
+      final adaptiveSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.adaptive(
           stateStream: stream,
           onRefresh: _onRefresh,
           children: listColors
               .map(
                 (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
+              color: e,
+              height: 100,
+            ),
+          )
               .toList(),
+          platform: platformWrapper,
         ),
       );
 
-      await tester.pumpWidget(materialSwipeRefresh);
+      await tester.pumpWidget(adaptiveSwipeRefresh);
 
-      await tester.drag(
-        find.byType(SwipeRefresh),
-        const Offset(0, 300),
-        touchSlopY: 0,
-      );
-      await tester.pump();
-      await tester.pump(const Duration(seconds: 1));
+      expect(() => adaptiveSwipeRefresh, returnsNormally);
 
-      expect(events, equals([SwipeRefreshState.loading]));
-
-      await tester.pump(const Duration(seconds: 3));
-
-      expect(events.last, equals(SwipeRefreshState.hidden));
-    },
-  );
-
-  testWidgets(
-    'When drag down is not enough to trigger an update the update should not be',
-    (tester) async {
-      final events = <SwipeRefreshState>[];
-
-      stream.listen(events.add);
-
-      final materialSwipeRefresh = makeTestableWidget(
-        SwipeRefresh.material(
-          stateStream: stream,
-          onRefresh: _onRefresh,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
-        ),
-      );
-      await tester.pumpWidget(materialSwipeRefresh);
-
-      expect(events, isEmpty);
-
-      await tester.drag(
-        find.byType(SwipeRefresh),
-        const Offset(0, 50),
-        touchSlopY: 0,
-      );
-
-      await tester.pump();
-
-      expect(events, isEmpty);
+      expect(find.byType(CupertinoSwipeRefresh), findsOneWidget);
     },
   );
 }
+
+class MockPlatformWrapper extends Mock implements PlatformWrapper {}
