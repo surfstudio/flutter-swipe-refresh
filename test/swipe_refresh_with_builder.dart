@@ -55,8 +55,8 @@ void main() {
   testWidgets(
     'SwipeRefresh.builder with itemBuilder as argument builds normally(iOS platform as example)',
     (tester) async {
-      when(() => platformWrapper.isAndroid()).thenReturn(false);
-      when(() => platformWrapper.isIOS()).thenReturn(true);
+      when(() => platformWrapper.isAndroid).thenReturn(false);
+      when(() => platformWrapper.isIOS).thenReturn(true);
 
       final testWidget = makeTestableWidget(
         SwipeRefresh.builder(

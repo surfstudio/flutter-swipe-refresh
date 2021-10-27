@@ -25,7 +25,7 @@ void main() {
   test(
     'Method isAndroid should return false',
     () {
-      final platform = platformWrapper.isAndroid();
+      final platform = platformWrapper.isAndroid;
 
       expect(platform, false);
     },
@@ -34,7 +34,7 @@ void main() {
   test(
     'Method isIOS should return false',
         () {
-      final platform = platformWrapper.isIOS();
+      final platform = platformWrapper.isIOS;
 
       expect(platform, false);
     },

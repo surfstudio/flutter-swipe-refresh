@@ -258,7 +258,7 @@ class SwipeRefresh extends StatelessWidget {
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
-          if (_platform.isAndroid()) {
+          if (_platform.isAndroid) {
             return MaterialSwipeRefresh(
               key: key,
               childrenDelegate: childrenDelegate,
@@ -274,7 +274,7 @@ class SwipeRefresh extends StatelessWidget {
               physics: physics,
               children: children,
             );
-          } else if (_platform.isIOS()) {
+          } else if (_platform.isIOS) {
             return CupertinoSwipeRefresh(
               key: key,
               childrenDelegate: childrenDelegate,

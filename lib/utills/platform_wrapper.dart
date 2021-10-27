@@ -16,11 +16,7 @@ import 'dart:io';
 
 /// Wrapper for Platform io.
 class PlatformWrapper {
-  bool isIOS() {
-    return Platform.isIOS;
-  }
+  bool get isIOS => Platform.isIOS;
 
-  bool isAndroid() {
-    return Platform.isAndroid;
-  }
+  bool get isAndroid => Platform.isAndroid;
 }
