@@ -52,8 +52,11 @@ void main() {
   ];
 
   testWidgets(
-    'When call SwipeRefresh.adaptive not on android or iOS platform should build normally with one Container',
+    'When call SwipeRefresh.adaptive not on Android or iOS platform should build normally with one Container',
     (tester) async {
+      when(() => platformWrapper.isAndroid()).thenReturn(false);
+      when(() => platformWrapper.isIOS()).thenReturn(false);
+
       final adaptiveSwipeRefresh = makeTestableWidget(
         SwipeRefresh.adaptive(
           stateStream: stream,
@@ -79,10 +82,9 @@ void main() {
   );
 
   testWidgets(
-    'When call SwipeRefresh.adaptive on android platform should build MaterialSwipeRefresh',
+    'When call SwipeRefresh.adaptive on Android platform should build MaterialSwipeRefresh',
     (tester) async {
-      when(() => platformWrapper.getPlatform())
-          .thenReturn(TargetPlatform.android);
+      when(() => platformWrapper.isAndroid()).thenReturn(true);
 
       final adaptiveSwipeRefresh = makeTestableWidget(
         SwipeRefresh.adaptive(
@@ -110,9 +112,9 @@ void main() {
 
   testWidgets(
     'When call SwipeRefresh.adaptive on iOS platform should build CupertinoSwipeRefresh',
-        (tester) async {
-      when(() => platformWrapper.getPlatform())
-          .thenReturn(TargetPlatform.iOS);
+    (tester) async {
+      when(() => platformWrapper.isAndroid()).thenReturn(false);
+      when(() => platformWrapper.isIOS()).thenReturn(true);
 
       final adaptiveSwipeRefresh = makeTestableWidget(
         SwipeRefresh.adaptive(
@@ -121,10 +123,10 @@ void main() {
           children: listColors
               .map(
                 (e) => Container(
-              color: e,
-              height: 100,
-            ),
-          )
+                  color: e,
+                  height: 100,
+                ),
+              )
               .toList(),
           platform: platformWrapper,
         ),

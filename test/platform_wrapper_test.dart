@@ -12,15 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:swipe_refresh/utills/platform_wrapper.dart';
 
-/// Wrapper for Platform io.
-class PlatformWrapper {
-  bool isIOS() {
-    return Platform.isIOS;
-  }
+void main() {
+  late PlatformWrapper platformWrapper;
 
-  bool isAndroid() {
-    return Platform.isAndroid;
-  }
+  setUp(() {
+    platformWrapper = PlatformWrapper();
+  });
+
+  test(
+    'Method isAndroid should return false',
+    () {
+      final platform = platformWrapper.isAndroid();
+
+      expect(platform, false);
+    },
+  );
+
+  test(
+    'Method isIOS should return false',
+        () {
+      final platform = platformWrapper.isIOS();
+
+      expect(platform, false);
+    },
+  );
 }

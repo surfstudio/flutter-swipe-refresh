@@ -258,39 +258,39 @@ class SwipeRefresh extends StatelessWidget {
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
-        if (_platform.getPlatform() == TargetPlatform.android) {
-          return MaterialSwipeRefresh(
-            key: key,
-            childrenDelegate: childrenDelegate,
-            stateStream: stateStream,
-            initState: initState,
-            onRefresh: onRefresh,
-            scrollController: scrollController,
-            backgroundColor: backgroundColor,
-            indicatorColor: indicatorColor,
-            shrinkWrap: shrinkWrap,
-            padding: padding,
-            keyboardDismissBehavior: keyboardDismissBehavior,
-            physics: physics,
-            children: children,
-          );
-        } else if (_platform.getPlatform() == TargetPlatform.iOS) {
-          return CupertinoSwipeRefresh(
-            key: key,
-            childrenDelegate: childrenDelegate,
-            stateStream: stateStream,
-            initState: initState,
-            onRefresh: onRefresh,
-            scrollController: scrollController,
-            refreshIndicatorExtent: refreshIndicatorExtent,
-            refreshTriggerPullDistance: refreshTriggerPullDistance,
-            indicatorBuilder: indicatorBuilder,
-            shrinkWrap: shrinkWrap,
-            padding: padding,
-            physics: physics,
-            children: children,
-          );
-        }
+          if (_platform.isAndroid()) {
+            return MaterialSwipeRefresh(
+              key: key,
+              childrenDelegate: childrenDelegate,
+              stateStream: stateStream,
+              initState: initState,
+              onRefresh: onRefresh,
+              scrollController: scrollController,
+              backgroundColor: backgroundColor,
+              indicatorColor: indicatorColor,
+              shrinkWrap: shrinkWrap,
+              padding: padding,
+              keyboardDismissBehavior: keyboardDismissBehavior,
+              physics: physics,
+              children: children,
+            );
+          } else if (_platform.isIOS()) {
+            return CupertinoSwipeRefresh(
+              key: key,
+              childrenDelegate: childrenDelegate,
+              stateStream: stateStream,
+              initState: initState,
+              onRefresh: onRefresh,
+              scrollController: scrollController,
+              refreshIndicatorExtent: refreshIndicatorExtent,
+              refreshTriggerPullDistance: refreshTriggerPullDistance,
+              indicatorBuilder: indicatorBuilder,
+              shrinkWrap: shrinkWrap,
+              padding: padding,
+              physics: physics,
+              children: children,
+            );
+          }
     }
 
     return Container();
