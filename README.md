@@ -1,7 +1,7 @@
 # Swipe Refresh
 
-[![Build Status](https://shields.io/github/workflow/status/surfstudio/SurfGear/build?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
-[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/SurfGear?flag=swipe_refresh&logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-swipe-refresh)
+[![Build Status](https://shields.io/github/workflow/status/surfstudio/flutter-swipe-refresh/build?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
+[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-swipe-refresh?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-swipe-refresh)
 [![Pub Version](https://img.shields.io/pub/v/swipe_refresh?logo=dart&logoColor=white)](https://pub.dev/packages/swipe_refresh)
 [![Pub Likes](https://badgen.net/pub/likes/swipe_refresh)](https://pub.dev/packages/swipe_refresh)
 [![Pub popularity](https://badgen.net/pub/popularity/swipe_refresh)](https://pub.dev/packages/swipe_refresh/score)
@@ -24,17 +24,6 @@ Main classes:
 2. [Widget for indicate swipe refresh](lib/src/swipe_refresh.dart)
 3. [Widget for indicate swipe refresh Material style](lib/src/material_swipe_refresh.dart)
 4. [Widget for indicate swipe refresh Cupertino style](lib/src/cupertino_swipe_refresh.dart)
-
-## Installation
-
-Add `swipe_refresh` to your `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  swipe_refresh: ^1.0.1
-```
-
-You can use both `stable` and `dev` versions of the package listed above in the badges bar.
 
 ## Changelog
 
