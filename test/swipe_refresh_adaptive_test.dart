@@ -76,7 +76,6 @@ void main() {
       await tester.pumpWidget(adaptiveSwipeRefresh);
 
       expect(() => adaptiveSwipeRefresh, returnsNormally);
-
       expect(find.byType(Container), findsOneWidget);
     },
   );
@@ -105,7 +104,6 @@ void main() {
       await tester.pumpWidget(adaptiveSwipeRefresh);
 
       expect(() => adaptiveSwipeRefresh, returnsNormally);
-
       expect(find.byType(MaterialSwipeRefresh), findsOneWidget);
     },
   );
@@ -135,7 +133,6 @@ void main() {
       await tester.pumpWidget(adaptiveSwipeRefresh);
 
       expect(() => adaptiveSwipeRefresh, returnsNormally);
-
       expect(find.byType(CupertinoSwipeRefresh), findsOneWidget);
     },
   );

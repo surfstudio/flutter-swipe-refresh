@@ -79,7 +79,8 @@ class SwipeRefresh extends StatelessWidget {
   SwipeRefresh.adaptive({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    required List<Widget> children,
+    List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     Key? key,
     SwipeRefreshState? initState,
     Color? indicatorColor,
@@ -97,6 +98,7 @@ class SwipeRefresh extends StatelessWidget {
           SwipeRefreshStyle.adaptive,
           key: key,
           children: children,
+          childrenDelegate: childrenDelegate,
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
@@ -117,7 +119,8 @@ class SwipeRefresh extends StatelessWidget {
   SwipeRefresh.material({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    required List<Widget> children,
+    List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     Key? key,
     SwipeRefreshState? initState,
     Color? indicatorColor,
@@ -131,6 +134,7 @@ class SwipeRefresh extends StatelessWidget {
           SwipeRefreshStyle.material,
           key: key,
           children: children,
+          childrenDelegate: childrenDelegate,
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
@@ -147,7 +151,8 @@ class SwipeRefresh extends StatelessWidget {
   SwipeRefresh.cupertino({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    required List<Widget> children,
+    List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     Key? key,
     SwipeRefreshState? initState,
     double? refreshTriggerPullDistance,
@@ -162,6 +167,7 @@ class SwipeRefresh extends StatelessWidget {
           SwipeRefreshStyle.cupertino,
           key: key,
           children: children,
+          childrenDelegate: childrenDelegate,
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
@@ -258,39 +264,39 @@ class SwipeRefresh extends StatelessWidget {
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
-          if (_platform.isAndroid) {
-            return MaterialSwipeRefresh(
-              key: key,
-              childrenDelegate: childrenDelegate,
-              stateStream: stateStream,
-              initState: initState,
-              onRefresh: onRefresh,
-              scrollController: scrollController,
-              backgroundColor: backgroundColor,
-              indicatorColor: indicatorColor,
-              shrinkWrap: shrinkWrap,
-              padding: padding,
-              keyboardDismissBehavior: keyboardDismissBehavior,
-              physics: physics,
-              children: children,
-            );
-          } else if (_platform.isIOS) {
-            return CupertinoSwipeRefresh(
-              key: key,
-              childrenDelegate: childrenDelegate,
-              stateStream: stateStream,
-              initState: initState,
-              onRefresh: onRefresh,
-              scrollController: scrollController,
-              refreshIndicatorExtent: refreshIndicatorExtent,
-              refreshTriggerPullDistance: refreshTriggerPullDistance,
-              indicatorBuilder: indicatorBuilder,
-              shrinkWrap: shrinkWrap,
-              padding: padding,
-              physics: physics,
-              children: children,
-            );
-          }
+        if (_platform.isAndroid) {
+          return MaterialSwipeRefresh(
+            key: key,
+            childrenDelegate: childrenDelegate,
+            stateStream: stateStream,
+            initState: initState,
+            onRefresh: onRefresh,
+            scrollController: scrollController,
+            backgroundColor: backgroundColor,
+            indicatorColor: indicatorColor,
+            shrinkWrap: shrinkWrap,
+            padding: padding,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            physics: physics,
+            children: children,
+          );
+        } else if (_platform.isIOS) {
+          return CupertinoSwipeRefresh(
+            key: key,
+            childrenDelegate: childrenDelegate,
+            stateStream: stateStream,
+            initState: initState,
+            onRefresh: onRefresh,
+            scrollController: scrollController,
+            refreshIndicatorExtent: refreshIndicatorExtent,
+            refreshTriggerPullDistance: refreshTriggerPullDistance,
+            indicatorBuilder: indicatorBuilder,
+            shrinkWrap: shrinkWrap,
+            padding: padding,
+            physics: physics,
+            children: children,
+          );
+        }
     }
 
     return Container();

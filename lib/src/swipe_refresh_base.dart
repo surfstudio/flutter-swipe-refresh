@@ -60,16 +60,18 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
   @protected
   Completer<void>? completer;
 
-  StreamSubscription<SwipeRefreshState>? _stateSubscription;
+  @visibleForTesting
+  @protected
+  SwipeRefreshState currentState = SwipeRefreshState.hidden;
 
-  SwipeRefreshState _currentState = SwipeRefreshState.hidden;
+  StreamSubscription<SwipeRefreshState>? _stateSubscription;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.initState != null) {
-      _currentState = widget.initState!;
+      currentState = widget.initState!;
     }
 
     _stateSubscription = widget.stateStream.listen(_updateState);
@@ -100,19 +102,19 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
 
   @protected
   Future<void> _onRefresh() {
-    _currentState = SwipeRefreshState.loading;
+    _updateState(SwipeRefreshState.loading);
     widget.onRefresh();
     completer = Completer<void>();
     return completer!.future;
   }
 
   void _updateState(SwipeRefreshState newState) {
-    if (_currentState != newState) {
+    if (currentState != newState) {
       setState(
         () {
-          _currentState = newState;
+          currentState = newState;
 
-          onUpdateState(_currentState);
+          onUpdateState(currentState);
         },
       );
     }

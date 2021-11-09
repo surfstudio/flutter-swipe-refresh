@@ -94,10 +94,6 @@ class _MaterialSwipeRefreshState
 
   @override
   void onUpdateState(SwipeRefreshState state) {
-    if (state == SwipeRefreshState.loading) {
-      (refreshKey.currentState as RefreshIndicatorState).show();
-    }
-
     if (state == SwipeRefreshState.hidden) {
       if (completer != null) {
         completer!.complete();

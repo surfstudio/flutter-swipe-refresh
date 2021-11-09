@@ -23,26 +23,26 @@ import 'package:swipe_refresh/utills/platform_wrapper.dart';
 import 'test_utils.dart';
 
 void main() {
-  late StreamController<SwipeRefreshState> _controller;
+  late StreamController<SwipeRefreshState> controller;
   late Stream<SwipeRefreshState> stream;
 
   late MockPlatformWrapper platformWrapper;
 
   setUp(() {
-    _controller = StreamController<SwipeRefreshState>.broadcast();
-    stream = _controller.stream;
+    controller = StreamController<SwipeRefreshState>.broadcast();
+    stream = controller.stream;
 
     platformWrapper = MockPlatformWrapper();
   });
 
   tearDown(() async {
-    await _controller.close();
+    await controller.close();
   });
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(seconds: 3));
 
-    _controller.sink.add(SwipeRefreshState.hidden);
+    controller.sink.add(SwipeRefreshState.hidden);
   }
 
   final listColors = [
@@ -74,7 +74,6 @@ void main() {
       await tester.pumpWidget(testWidget);
 
       expect(() => testWidget, returnsNormally);
-
       expect(find.byType(Container), findsNWidgets(4));
     },
   );
