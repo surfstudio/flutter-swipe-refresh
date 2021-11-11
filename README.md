@@ -31,10 +31,10 @@ Add `swipe_refresh` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  swipe_refresh: ^1.0.1
+  swipe_refresh: $currentVersion$
 ```
 
-You can use both `stable` and `dev` versions of the package listed above in the badges bar.
+<p>At this moment, the current version of <code>swipe_refresh</code> is <a href="https://pub.dev/packages/swipe_refresh"><img style="vertical-align:middle;" src="https://img.shields.io/pub/v/swipe_refresh.svg" alt="swipe_refresh version"></a>.</p>
 
 ## Changelog
 
