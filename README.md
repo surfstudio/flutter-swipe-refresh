@@ -81,7 +81,7 @@ Future<void> _refresh() async {
 
 ### Builder
 
-Refresh indicator widget with adaptive to platform style, with SliverChildBuilderDelegate in childDelegate.
+Refresh indicator widget with adaptive to platform style, and with SliverChildBuilderDelegate in childDelegate(so as not to create more child elements than are visible through Viewport).
 
 ```dart
 SwipeRefresh.builder(
@@ -92,8 +92,8 @@ itemCount: Colors.primaries.length,
 itemBuilder: (context, index) {
 return Container(
  ...
-);
-},
+   );
+ },
 ),
 
 Future<void> _refresh() async {
