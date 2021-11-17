@@ -19,6 +19,7 @@ import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
 /// Refresh indicator widget with Cupertino style.
+/// [children] -
 class CupertinoSwipeRefresh extends SwipeRefreshBase {
   static const double defaultRefreshTriggerPullDistance = 100.0;
   static const double defaultRefreshIndicatorExtent = 60.0;
