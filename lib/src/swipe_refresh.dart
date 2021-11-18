@@ -23,10 +23,11 @@ import 'package:swipe_refresh/src/swipe_refresh_style.dart';
 /// Refresh indicator widget.
 ///
 /// Params for Material Design style:
-/// [indicatorColor], [backgroundColor].
+/// [indicatorColor], [backgroundColor](more details [MaterialSwipeRefresh]).
 ///
 /// Params for Cupertino style:
-/// [refreshTriggerPullDistance], [refreshIndicatorExtent], [indicatorBuilder].
+/// [refreshTriggerPullDistance], [refreshIndicatorExtent], [indicatorBuilder]
+/// (more details [CupertinoSwipeRefresh]).
 class SwipeRefresh extends StatelessWidget {
   final List<Widget>? children;
   final VoidCallback onRefresh;

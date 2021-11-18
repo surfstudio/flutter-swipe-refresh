@@ -19,7 +19,29 @@ import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
 /// Refresh indicator widget with Cupertino style.
-/// [children] -
+/// [stateStream] - indicator state([SwipeRefreshState.loading] or
+/// [SwipeRefreshState.hidden]).
+/// [onRefresh] - callback invoked when pulled by [refreshTriggerPullDistance].
+/// [children] - list of any widgets.
+/// [childrenDelegate] - pass the inheritor to SliverChildDelegate to avoid
+/// creating more children than are visible through the [Viewport].
+/// [initState] - initialization state([SwipeRefreshState.loading] or
+/// [SwipeRefreshState.hidden]).
+/// [padding] - passed to add [SliverPadding].
+/// [scrollController] - ScrollController for [CustomScrollView].
+/// [shrinkWrap] - Whether the extent of the scroll view should be determined
+/// by the contents being viewed(default - false).
+/// [refreshTriggerPullDistance] - The amount of overscroll the scrollable
+/// must be dragged to trigger a reload(default - [defaultRefreshTriggerPullDistance]).
+/// [refreshIndicatorExtent] - amount of space the refresh indicator
+/// sliver will keep holding while [onRefresh] is still running.
+/// [indicatorBuilder] - builder that's called as this sliver's size changes,
+/// and as the state changes(default - [CupertinoSliverRefreshControl.buildRefreshIndicator]).
+/// [keyboardDismissBehavior] - [ScrollViewKeyboardDismissBehavior]
+/// the defines how this [ScrollView] will dismiss the keyboard automatically.
+/// (if == null it will be [ScrollViewKeyboardDismissBehavior.onDrag]).
+/// [physics] - defines the physics of the scroll(if == null it will be
+/// [AlwaysScrollableScrollPhysics]).
 class CupertinoSwipeRefresh extends SwipeRefreshBase {
   static const double defaultRefreshTriggerPullDistance = 100.0;
   static const double defaultRefreshIndicatorExtent = 60.0;
