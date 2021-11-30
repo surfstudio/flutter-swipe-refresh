@@ -9,12 +9,14 @@
 
 This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
 
+[![Swipe Refresh](https://i.ibb.co/wCbKCy6/Swipe-Refresh.png)](https://github.com/surfstudio/SurfGear)
+
 ## Description
 
 Widget for refresh by swipe.
 
-![](media/material.gif)
-![](media/cupertino.gif)
+![](https://i.ibb.co/7Kmy91f/material.gif)
+![](https://i.ibb.co/smPxRp7/cupertino.gif)
 
 Main classes:
 
