@@ -14,15 +14,15 @@
 
 /// Indicator style.
 enum SwipeRefreshStyle {
-  /// Material Design
+  /// Material Design.
   material,
 
-  /// Cupertino
+  /// Cupertino.
   cupertino,
 
-  /// Adaptive
+  /// Adaptive.
   adaptive,
 
-  /// Builder
+  /// Builder.
   builder,
 }

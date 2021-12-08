@@ -23,10 +23,11 @@ import 'package:swipe_refresh/src/swipe_refresh_style.dart';
 /// Refresh indicator widget.
 ///
 /// Params for Material Design style:
-/// [indicatorColor], [backgroundColor].
+/// [indicatorColor], [backgroundColor](more details [MaterialSwipeRefresh]).
 ///
 /// Params for Cupertino style:
-/// [refreshTriggerPullDistance], [refreshIndicatorExtent], [indicatorBuilder].
+/// [refreshTriggerPullDistance], [refreshIndicatorExtent], [indicatorBuilder]
+/// (more details [CupertinoSwipeRefresh]).
 class SwipeRefresh extends StatelessWidget {
   final List<Widget>? children;
   final VoidCallback onRefresh;
@@ -170,9 +171,9 @@ class SwipeRefresh extends StatelessWidget {
           physics: physics,
         );
 
-  /// Crete SwipeRefresh as common link
-  /// remove some conflicts between ScrollControllers when ListView added into
-  /// SwipeRefresh (remove need to add extra ListView)
+  /// Create refresh indicator with adaptive to platform style.
+  /// Uses SliverChildBuilderDelegate in childrenDelegate to avoid
+  /// creating more children than are visible through the [Viewport].
   factory SwipeRefresh.builder({
     required IndexedWidgetBuilder itemBuilder,
     required int itemCount,

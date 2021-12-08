@@ -17,6 +17,6 @@ enum SwipeRefreshState {
   /// Indicator hidden.
   hidden,
 
-  /// Indicator showed.
+  /// Indicator shown.
   loading,
 }
