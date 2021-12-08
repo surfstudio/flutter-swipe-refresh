@@ -12,7 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:swipe_refresh/utills/platform_wrapper.dart';
 
-// ignore: avoid-returning-widgets
-Widget makeTestableWidget(Widget widget) => MaterialApp(home: widget);
+void main() {
+  late PlatformWrapper platformWrapper;
+
+  setUp(() {
+    platformWrapper = const PlatformWrapper();
+  });
+
+  test(
+    'Method isAndroid should return false',
+    () {
+      final isAndroid = platformWrapper.isAndroid;
+
+      expect(isAndroid, false);
+    },
+  );
+
+  test(
+    'Method isIOS should return false',
+    () {
+      final isIOS = platformWrapper.isIOS;
+
+      expect(isIOS, false);
+    },
+  );
+}

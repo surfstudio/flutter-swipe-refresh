@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:swipe_refresh/src/cupertino_swipe_refresh.dart';
 import 'package:swipe_refresh/src/material_swipe_refresh.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 import 'package:swipe_refresh/src/swipe_refresh_style.dart';
+import 'package:swipe_refresh/utills/platform_wrapper.dart';
 
 /// Refresh indicator widget.
 ///
@@ -45,6 +45,7 @@ class SwipeRefresh extends StatelessWidget {
   final bool shrinkWrap;
   final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
   final ScrollPhysics? physics;
+  final PlatformWrapper _platform;
 
   const SwipeRefresh(
     this.style, {
@@ -64,6 +65,7 @@ class SwipeRefresh extends StatelessWidget {
     double? refreshTriggerPullDistance,
     double? refreshIndicatorExtent,
     RefreshControlIndicatorBuilder? indicatorBuilder,
+    PlatformWrapper? platform,
   })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
         refreshTriggerPullDistance = refreshTriggerPullDistance ??
             CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
@@ -71,13 +73,15 @@ class SwipeRefresh extends StatelessWidget {
             CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
         indicatorBuilder = indicatorBuilder ??
             CupertinoSliverRefreshControl.buildRefreshIndicator,
+        _platform = platform ?? const PlatformWrapper(),
         super(key: key);
 
   /// Create refresh indicator adaptive to platform.
   const SwipeRefresh.adaptive({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    required List<Widget> children,
+    List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     Key? key,
     SwipeRefreshState? initState,
     Color? indicatorColor,
@@ -90,10 +94,12 @@ class SwipeRefresh extends StatelessWidget {
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    PlatformWrapper? platform,
   }) : this(
           SwipeRefreshStyle.adaptive,
           key: key,
           children: children,
+          childrenDelegate: childrenDelegate,
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
@@ -107,13 +113,15 @@ class SwipeRefresh extends StatelessWidget {
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
+          platform: platform,
         );
 
   /// Create refresh indicator with Material Design style.
   const SwipeRefresh.material({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    required List<Widget> children,
+    List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     Key? key,
     SwipeRefreshState? initState,
     Color? indicatorColor,
@@ -127,6 +135,7 @@ class SwipeRefresh extends StatelessWidget {
           SwipeRefreshStyle.material,
           key: key,
           children: children,
+          childrenDelegate: childrenDelegate,
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
@@ -143,7 +152,8 @@ class SwipeRefresh extends StatelessWidget {
   const SwipeRefresh.cupertino({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    required List<Widget> children,
+    List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     Key? key,
     SwipeRefreshState? initState,
     double? refreshTriggerPullDistance,
@@ -158,6 +168,7 @@ class SwipeRefresh extends StatelessWidget {
           SwipeRefreshStyle.cupertino,
           key: key,
           children: children,
+          childrenDelegate: childrenDelegate,
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
@@ -191,6 +202,7 @@ class SwipeRefresh extends StatelessWidget {
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    PlatformWrapper? platform,
   }) {
     return SwipeRefresh(
       SwipeRefreshStyle.adaptive,
@@ -212,6 +224,7 @@ class SwipeRefresh extends StatelessWidget {
         itemBuilder,
         childCount: itemCount,
       ),
+      platform: platform,
     );
   }
 
@@ -252,7 +265,7 @@ class SwipeRefresh extends StatelessWidget {
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
-        if (Platform.isAndroid) {
+        if (_platform.isAndroid) {
           return MaterialSwipeRefresh(
             key: key,
             childrenDelegate: childrenDelegate,
@@ -268,7 +281,7 @@ class SwipeRefresh extends StatelessWidget {
             physics: physics,
             children: children,
           );
-        } else if (Platform.isIOS) {
+        } else if (_platform.isIOS) {
           return CupertinoSwipeRefresh(
             key: key,
             childrenDelegate: childrenDelegate,

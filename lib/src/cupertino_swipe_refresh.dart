@@ -135,10 +135,6 @@ class _CupertinoSwipeRefreshState
 
   @override
   void onUpdateState(SwipeRefreshState state) {
-    if (state == SwipeRefreshState.loading) {
-      _scrollController.jumpTo(-(widget.refreshIndicatorExtent + 5));
-    }
-
     if (state == SwipeRefreshState.hidden) {
       if (completer != null) {
         completer!.complete();

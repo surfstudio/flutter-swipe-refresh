@@ -12,7 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-// ignore: avoid-returning-widgets
-Widget makeTestableWidget(Widget widget) => MaterialApp(home: widget);
+/// Wrapper for Platform io.
+class PlatformWrapper {
+  bool get isIOS => Platform.isIOS;
+
+  bool get isAndroid => Platform.isAndroid;
+
+  const PlatformWrapper();
+}

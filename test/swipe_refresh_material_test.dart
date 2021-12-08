@@ -15,87 +15,241 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
 
 import 'test_utils.dart';
 
 void main() {
-  group('SwipeRefresh.material', () {
-    late StreamController<SwipeRefreshState> _controller;
-    late Stream<SwipeRefreshState> stream;
+  late StreamController<SwipeRefreshState> controller;
+  late Stream<SwipeRefreshState> stream;
+  late MockOnRefreshFunction onRefreshFunction;
+  late TestSliverChildListDelegate sliverChildDelegate;
 
-    setUp(() {
-      _controller = StreamController<SwipeRefreshState>.broadcast();
-      stream = _controller.stream;
-    });
+  setUp(() {
+    controller = StreamController<SwipeRefreshState>.broadcast();
+    stream = controller.stream;
+    sliverChildDelegate = TestSliverChildListDelegate([const Text('Test')]);
 
-    tearDown(() async {
-      await _controller.close();
-    });
+    onRefreshFunction = MockOnRefreshFunction();
+    when(() => onRefreshFunction.call()).thenAnswer(
+      (invocation) async {
+        return controller.sink.add(SwipeRefreshState.hidden);
+      },
+    );
+  });
 
-    Future<void> _onRefresh() async {
-      await Future<void>.delayed(const Duration(seconds: 3));
+  tearDown(() async {
+    await controller.close();
+  });
 
-      _controller.sink.add(SwipeRefreshState.hidden);
-    }
+  final listColors = [
+    Colors.blue,
+    Colors.green,
+    Colors.red,
+    Colors.amber,
+  ];
 
-    group("doesn't break", () {
-      testWidgets('with children as argument', (tester) async {
-        final testWidget = makeTestableWidget(
-          SwipeRefresh.material(
-            stateStream: stream,
-            onRefresh: _onRefresh,
-            children: Colors.primaries
-                .map(
-                  (e) => Container(
-                    color: e,
-                    height: 100,
-                  ),
-                )
-                .toList(),
-          ),
-        );
+  testWidgets(
+    'When trying create MaterialSwipeRefresh without children or '
+    'childrenDelegate should be assertion error',
+    (tester) async {
+      expect(
+        () {
+          return makeTestableWidget(
+            MaterialSwipeRefresh(
+              stateStream: stream,
+              onRefresh: onRefreshFunction,
+            ),
+          );
+        },
+        throwsAssertionError,
+      );
+    },
+  );
 
-        await tester.pumpWidget(testWidget);
-      });
-    });
-
-    testWidgets('emits hidden state on drag after 3 seconds', (tester) async {
-      final events = <SwipeRefreshState>[];
-
-      stream.listen(expectAsync1<void, SwipeRefreshState>(events.add));
-
-      final testWidget = makeTestableWidget(
+  testWidgets(
+    'SwipeRefresh.material widget with children as argument does not break',
+    (tester) async {
+      final materialSwipeRefresh = makeTestableWidget(
         SwipeRefresh.material(
           stateStream: stream,
-          onRefresh: _onRefresh,
-          children: const [
-            SizedBox(height: 100),
-            SizedBox(height: 100),
-          ],
+          onRefresh: onRefreshFunction,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
         ),
       );
 
-      await tester.pumpWidget(testWidget);
+      await tester.pumpWidget(materialSwipeRefresh);
 
-      expect(events, isEmpty);
+      expect(() => materialSwipeRefresh, returnsNormally);
 
-      /// drag is not enouth to trugger refresh
-      await tester.drag(find.byType(SwipeRefresh), const Offset(0, 100));
+      expect(find.byType(Container), findsNWidgets(4));
 
-      expect(events, isEmpty);
+      expect(find.byType(MaterialSwipeRefresh), findsOneWidget);
+    },
+  );
 
-      await tester.drag(find.byType(SwipeRefresh), const Offset(0, 300));
+  testWidgets(
+    'When drag down enough, the refresh should start and should called '
+    'onRefreshFunction',
+    (tester) async {
+      final materialSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.material(
+          stateStream: stream,
+          onRefresh: onRefreshFunction,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
+        ),
+      );
 
-      await tester.pump(const Duration(seconds: 1));
-
-      /// event must reveal after 3 seconds
-      expect(events, isEmpty);
-
+      await tester.pumpWidget(materialSwipeRefresh);
+      await tester.drag(
+        find.byType(SwipeRefresh),
+        const Offset(0, 300),
+        touchSlopY: 0,
+      );
+      await tester.pump();
       await tester.pump(const Duration(seconds: 3));
 
-      expect(events, equals([SwipeRefreshState.hidden]));
-    });
-  });
+      verify(() => onRefreshFunction()).called(1);
+    },
+  );
+
+  testWidgets(
+    'When drag down enough, the refresh should start and end after 3 seconds',
+    (tester) async {
+      final materialSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.material(
+          stateStream: stream,
+          onRefresh: onRefreshFunction,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
+        ),
+      );
+
+      await tester.pumpWidget(materialSwipeRefresh);
+      await tester.drag(
+        find.byType(SwipeRefresh),
+        const Offset(0, 300),
+        touchSlopY: 0,
+      );
+      await tester.pump();
+
+      expect(find.byType(RefreshProgressIndicator), findsOneWidget);
+
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(find.byType(RefreshProgressIndicator), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'When drag down is not enough to trigger an update the update should not be',
+    (tester) async {
+      final materialSwipeRefresh = makeTestableWidget(
+        SwipeRefresh.material(
+          stateStream: stream,
+          onRefresh: onRefreshFunction,
+          children: listColors
+              .map(
+                (e) => Container(
+                  color: e,
+                  height: 100,
+                ),
+              )
+              .toList(),
+        ),
+      );
+      await tester.pumpWidget(materialSwipeRefresh);
+      await tester.drag(
+        find.byType(SwipeRefresh),
+        const Offset(0, 50),
+        touchSlopY: 0,
+      );
+      await tester.pump();
+
+      verifyNever(() => onRefreshFunction());
+    },
+  );
+
+  testWidgets(
+    'If initState: SwipeRefreshState.loading passed to the SwipeRefresh.material, '
+    'currentState should be SwipeRefreshState.loading',
+    (tester) async {
+      final materialWidget = SwipeRefresh.material(
+        stateStream: stream,
+        onRefresh: onRefreshFunction,
+        children: listColors
+            .map(
+              (e) => Container(
+                color: e,
+                height: 100,
+              ),
+            )
+            .toList(),
+        initState: SwipeRefreshState.loading,
+      );
+      final materialSwipeRefresh = makeTestableWidget(materialWidget);
+      await tester.pumpWidget(materialSwipeRefresh);
+      final SwipeRefreshBaseState state = tester.state(
+        find.byType(MaterialSwipeRefresh),
+      ) as SwipeRefreshBaseState<MaterialSwipeRefresh>;
+
+      expect(state.currentState, materialWidget.initState);
+    },
+  );
+
+  testWidgets(
+    'SwipeRefresh.material widget with childrenDelegate as argument does not break',
+    (tester) async {
+      final scrollController = ScrollController();
+
+      final materialWidget = MaterialSwipeRefresh(
+        stateStream: stream,
+        onRefresh: onRefreshFunction,
+        childrenDelegate: sliverChildDelegate,
+        scrollController: scrollController,
+      );
+
+      final materialSwipeRefresh = makeTestableWidget(materialWidget);
+      await tester.pumpWidget(materialSwipeRefresh);
+
+      expect(
+        find.text('Test'),
+        findsOneWidget,
+      );
+    },
+  );
+}
+
+class MockOnRefreshFunction extends Mock {
+  void call();
+}
+
+class TestSliverChildListDelegate extends SliverChildListDelegate {
+  TestSliverChildListDelegate(List<Widget> children) : super(children);
 }
