@@ -20,6 +20,30 @@ import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
 /// Refresh indicator widget with Material Design style.
+/// [stateStream] - indicator state([SwipeRefreshState.loading] or
+/// [SwipeRefreshState.hidden]).
+/// [onRefresh] - function that's called when the user has dragged the
+/// refresh indicator far enough to demonstrate that they want the app to refresh.
+/// [indicatorColor] - progress indicator's foreground color
+/// (default - [ColorScheme.primary]).
+/// [children] - list of any widgets.
+/// [childrenDelegate] - pass the inheritor to SliverChildDelegate
+/// to avoid creating more children than are visible through the [Viewport].
+/// [initState] - initialization state([SwipeRefreshState.loading] or
+/// [SwipeRefreshState.hidden]).
+/// [backgroundColor] - progress indicator's background color
+/// (default - Color(0xFFFFFFFF)).
+/// [scrollController] - [ScrollController] for [ListView].
+/// [padding] -  corresponds to having a [SliverPadding] in the
+/// [CustomScrollView.slivers] property instead of the list itself,
+/// and having the [SliverList] instead be a child of the [SliverPadding].
+/// [shrinkWrap] - Whether the extent of the scroll view should be determined
+/// by the contents being viewed(default - false).
+/// [keyboardDismissBehavior] - [ScrollViewKeyboardDismissBehavior]
+/// the defines how this [ScrollView] will dismiss the keyboard automatically.
+/// (if == null it will be [ScrollViewKeyboardDismissBehavior.manual]).
+/// [physics] - defines the physics of the scroll(if == null it will be
+/// [AlwaysScrollableScrollPhysics]).
 class MaterialSwipeRefresh extends SwipeRefreshBase {
   final Color? indicatorColor;
   final Color backgroundColor;

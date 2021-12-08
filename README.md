@@ -9,14 +9,14 @@
 
 This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
 
-## About
+[![Swipe Refresh](https://i.ibb.co/wCbKCy6/Swipe-Refresh.png)](https://github.com/surfstudio/SurfGear)
+
+## Description
 
 Widget for refresh by swipe.
 
-![](media/material.gif)
-![](media/cupertino.gif)
-
-## Usage
+![](https://i.ibb.co/7Kmy91f/material.gif)
+![](https://i.ibb.co/smPxRp7/cupertino.gif)
 
 Main classes:
 
@@ -24,6 +24,85 @@ Main classes:
 2. [Widget for indicate swipe refresh](lib/src/swipe_refresh.dart)
 3. [Widget for indicate swipe refresh Material style](lib/src/material_swipe_refresh.dart)
 4. [Widget for indicate swipe refresh Cupertino style](lib/src/cupertino_swipe_refresh.dart)
+
+## Example
+
+### Material
+
+Refresh indicator widget with Material Design style.
+
+```dart
+SwipeRefresh.material(
+stateStream: Stream<SwipeRefreshState>(),
+onRefresh: _refresh,
+padding: const EdgeInsets.symmetric(vertical: 10),
+children: <Widget>[ ... ],
+);
+
+Future<void> _refresh() async {
+  // When all needed is done change state.
+  _controller.sink.add(SwipeRefreshState.hidden);
+}
+```
+
+### Cupertino
+
+Refresh indicator widget with Cupertino Design style.
+
+```dart
+SwipeRefresh.cupertino(
+stateStream: Stream<SwipeRefreshState>(),
+onRefresh: _refresh,
+padding: const EdgeInsets.symmetric(vertical: 10),
+children: <Widget>[ ... ],
+);
+
+Future<void> _refresh() async {
+  // When all needed is done change state.
+  _controller.sink.add(SwipeRefreshState.hidden);
+}
+```
+
+### Adaptive
+
+Refresh indicator widget with adaptive to platform style.
+
+```dart
+SwipeRefresh.adaptive(
+stateStream: Stream<SwipeRefreshState>(),
+onRefresh: _refresh,
+padding: const EdgeInsets.symmetric(vertical: 10),
+children: <Widget>[ ... ],
+);
+
+Future<void> _refresh() async {
+  // When all needed is done change state.
+  _controller.sink.add(SwipeRefreshState.hidden);
+}
+```
+
+### Builder
+
+Refresh indicator widget with adaptive to platform style, and with SliverChildBuilderDelegate in childDelegate(so as not to create more child elements than are visible through Viewport).
+
+```dart
+SwipeRefresh.builder(
+stateStream:  Stream<SwipeRefreshState>(),
+onRefresh: _refresh,
+padding: const EdgeInsets.symmetric(vertical: 10),
+itemCount: Colors.primaries.length,
+itemBuilder: (context, index) {
+return Container(
+ ...
+   );
+ },
+),
+
+Future<void> _refresh() async {
+  // When all needed is done change state.
+  _controller.sink.add(SwipeRefreshState.hidden);
+}
+```
 
 ## Installation
 
@@ -42,11 +121,11 @@ All notable changes to this project will be documented in [this file](./CHANGELO
 
 ## Issues
 
-For issues, file directly in the [Issues](https://github.com/surfstudio/flutter-swipe-refresh/issues) section.
+To report your issues, submit them directly in the [Issues](https://github.com/surfstudio/flutter-swipe-refresh/issues) section.
 
 ## Contribute
 
-If you would like to contribute to the package (e.g. by improving the documentation, solving a bug or adding a cool new feature), please review our [contribution guide](./CONTRIBUTING.md) first and send us your pull request.
+If you would like to contribute to the package (e.g. by improving the documentation, fixing a bug or adding a cool new feature), please read our [contribution guide](./CONTRIBUTING.md) first and send us your pull request.
 
 Your PRs are always welcome.
 
