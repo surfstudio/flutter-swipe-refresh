@@ -19,4 +19,6 @@ class PlatformWrapper {
   bool get isIOS => Platform.isIOS;
 
   bool get isAndroid => Platform.isAndroid;
+
+  const PlatformWrapper();
 }

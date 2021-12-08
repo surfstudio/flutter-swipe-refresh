@@ -19,7 +19,7 @@ void main() {
   late PlatformWrapper platformWrapper;
 
   setUp(() {
-    platformWrapper = PlatformWrapper();
+    platformWrapper = const PlatformWrapper();
   });
 
   test(
@@ -33,7 +33,7 @@ void main() {
 
   test(
     'Method isIOS should return false',
-        () {
+    () {
       final isIOS = platformWrapper.isIOS;
 
       expect(isIOS, false);

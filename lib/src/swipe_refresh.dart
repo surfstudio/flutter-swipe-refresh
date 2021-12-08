@@ -47,7 +47,7 @@ class SwipeRefresh extends StatelessWidget {
   final ScrollPhysics? physics;
   final PlatformWrapper _platform;
 
-  SwipeRefresh(
+  const SwipeRefresh(
     this.style, {
     required this.stateStream,
     required this.onRefresh,
@@ -73,11 +73,11 @@ class SwipeRefresh extends StatelessWidget {
             CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
         indicatorBuilder = indicatorBuilder ??
             CupertinoSliverRefreshControl.buildRefreshIndicator,
-        _platform = platform ?? PlatformWrapper(),
+        _platform = platform ?? const PlatformWrapper(),
         super(key: key);
 
   /// Create refresh indicator adaptive to platform.
-  SwipeRefresh.adaptive({
+  const SwipeRefresh.adaptive({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     List<Widget>? children,
@@ -117,7 +117,7 @@ class SwipeRefresh extends StatelessWidget {
         );
 
   /// Create refresh indicator with Material Design style.
-  SwipeRefresh.material({
+  const SwipeRefresh.material({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     List<Widget>? children,
@@ -149,7 +149,7 @@ class SwipeRefresh extends StatelessWidget {
         );
 
   /// Create refresh indicator with Cupertino style.
-  SwipeRefresh.cupertino({
+  const SwipeRefresh.cupertino({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     List<Widget>? children,
