@@ -251,5 +251,5 @@ class MockOnRefreshFunction extends Mock {
 }
 
 class TestSliverChildListDelegate extends SliverChildListDelegate {
- TestSliverChildListDelegate(List<Widget> children) : super(children);
+  TestSliverChildListDelegate(List<Widget> children) : super(children);
 }

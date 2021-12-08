@@ -278,7 +278,7 @@ void main() {
 
   testWidgets(
     'If padding passed to the SwipeRefresh.cupertino, '
-      'SliverList should be wrapped in SliverPadding',
+    'SliverList should be wrapped in SliverPadding',
     (tester) async {
       final events = <SwipeRefreshState>[];
 
