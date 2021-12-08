@@ -45,14 +45,13 @@ class SwipeRefresh extends StatelessWidget {
     Color? backgroundColor,
     double? refreshTriggerPullDistance,
     double? refreshIndicatorExtent,
-    RefreshControlIndicatorBuilder? indicatorBuilder,
+    this.indicatorBuilder,
+    this.cacheExtent,
   })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
         refreshTriggerPullDistance = refreshTriggerPullDistance ??
             CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
         refreshIndicatorExtent = refreshIndicatorExtent ??
             CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
-        indicatorBuilder = indicatorBuilder ??
-            CupertinoSliverRefreshControl.buildRefreshIndicator,
         super(key: key);
 
   /// Create refresh indicator adaptive to platform.
@@ -72,6 +71,7 @@ class SwipeRefresh extends StatelessWidget {
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    double? cacheExtent,
   }) : this(
           SwipeRefreshStyle.adaptive,
           key: key,
@@ -89,10 +89,11 @@ class SwipeRefresh extends StatelessWidget {
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
+          cacheExtent: cacheExtent,
         );
 
   /// Create refresh indicator with Material Design style.
-  const SwipeRefresh.material({
+  SwipeRefresh.material({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
     required List<Widget> children,
@@ -104,7 +105,9 @@ class SwipeRefresh extends StatelessWidget {
     EdgeInsets? padding,
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
+    WidgetBuilder? indicatorBuilder,
     ScrollPhysics? physics,
+    double? cacheExtent,
   }) : this(
           SwipeRefreshStyle.material,
           key: key,
@@ -119,6 +122,10 @@ class SwipeRefresh extends StatelessWidget {
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
+          cacheExtent: cacheExtent,
+          indicatorBuilder: indicatorBuilder == null
+              ? null
+              : (context, mode, _, __, ___) => indicatorBuilder(context),
         );
 
   /// Create refresh indicator with Cupertino style.
@@ -130,12 +137,14 @@ class SwipeRefresh extends StatelessWidget {
     SwipeRefreshState? initState,
     double? refreshTriggerPullDistance,
     double? refreshIndicatorExtent,
-    RefreshControlIndicatorBuilder? indicatorBuilder,
+    RefreshControlIndicatorBuilder indicatorBuilder =
+        CupertinoSliverRefreshControl.buildRefreshIndicator,
     ScrollController? scrollController,
     EdgeInsets? padding,
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    double? cacheExtent,
   }) : this(
           SwipeRefreshStyle.cupertino,
           key: key,
@@ -151,6 +160,7 @@ class SwipeRefresh extends StatelessWidget {
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
+          cacheExtent: cacheExtent,
         );
 
   /// Crete SwipeRefresh as common link
@@ -173,6 +183,7 @@ class SwipeRefresh extends StatelessWidget {
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    double? cacheExtent,
   }) {
     return SwipeRefresh(
       SwipeRefreshStyle.adaptive,
@@ -194,6 +205,7 @@ class SwipeRefresh extends StatelessWidget {
         itemBuilder,
         childCount: itemCount,
       ),
+      cacheExtent: cacheExtent,
     );
   }
 
@@ -205,7 +217,7 @@ class SwipeRefresh extends StatelessWidget {
   final Color backgroundColor;
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
+  final RefreshControlIndicatorBuilder? indicatorBuilder;
   final SwipeRefreshStyle style;
   final ScrollController? scrollController;
   final SliverChildDelegate? childrenDelegate;
@@ -213,6 +225,7 @@ class SwipeRefresh extends StatelessWidget {
   final bool shrinkWrap;
   final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
   final ScrollPhysics? physics;
+  final double? cacheExtent;
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +234,7 @@ class SwipeRefresh extends StatelessWidget {
 
   // ignore: avoid-returning-widgets
   Widget _buildByStyle(SwipeRefreshStyle style) {
+    final indicatorBuilder = this.indicatorBuilder;
     switch (style) {
       case SwipeRefreshStyle.material:
         return MaterialSwipeRefresh(
@@ -237,6 +251,11 @@ class SwipeRefresh extends StatelessWidget {
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
           children: children,
+          cacheExtent: cacheExtent,
+          indicatorBuilder: indicatorBuilder == null
+              ? null
+              : (context) =>
+                  indicatorBuilder(context, RefreshIndicatorMode.done, 0, 0, 0),
         );
       case SwipeRefreshStyle.cupertino:
         return CupertinoSwipeRefresh(
@@ -248,11 +267,13 @@ class SwipeRefresh extends StatelessWidget {
           scrollController: scrollController,
           refreshIndicatorExtent: refreshIndicatorExtent,
           refreshTriggerPullDistance: refreshTriggerPullDistance,
-          indicatorBuilder: indicatorBuilder,
+          indicatorBuilder: indicatorBuilder ??
+              CupertinoSliverRefreshControl.buildRefreshIndicator,
           shrinkWrap: shrinkWrap,
           padding: padding,
           physics: physics,
           children: children,
+          cacheExtent: cacheExtent,
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
