@@ -28,6 +28,23 @@ import 'package:swipe_refresh/src/swipe_refresh_style.dart';
 /// Params for Cupertino style:
 /// [refreshTriggerPullDistance], [refreshIndicatorExtent], [indicatorBuilder].
 class SwipeRefresh extends StatelessWidget {
+  final List<Widget>? children;
+  final VoidCallback onRefresh;
+  final SwipeRefreshState? initState;
+  final Stream<SwipeRefreshState> stateStream;
+  final Color? indicatorColor;
+  final Color backgroundColor;
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
+  final RefreshControlIndicatorBuilder indicatorBuilder;
+  final SwipeRefreshStyle style;
+  final ScrollController? scrollController;
+  final SliverChildDelegate? childrenDelegate;
+  final EdgeInsets? padding;
+  final bool shrinkWrap;
+  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
+  final ScrollPhysics? physics;
+
   const SwipeRefresh(
     this.style, {
     required this.stateStream,
@@ -197,30 +214,8 @@ class SwipeRefresh extends StatelessWidget {
     );
   }
 
-  final List<Widget>? children;
-  final VoidCallback onRefresh;
-  final SwipeRefreshState? initState;
-  final Stream<SwipeRefreshState> stateStream;
-  final Color? indicatorColor;
-  final Color backgroundColor;
-  final double refreshTriggerPullDistance;
-  final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
-  final SwipeRefreshStyle style;
-  final ScrollController? scrollController;
-  final SliverChildDelegate? childrenDelegate;
-  final EdgeInsets? padding;
-  final bool shrinkWrap;
-  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
-  final ScrollPhysics? physics;
-
   @override
   Widget build(BuildContext context) {
-    return _buildByStyle(style);
-  }
-
-  // ignore: avoid-returning-widgets
-  Widget _buildByStyle(SwipeRefreshStyle style) {
     switch (style) {
       case SwipeRefreshStyle.material:
         return MaterialSwipeRefresh(
@@ -257,9 +252,37 @@ class SwipeRefresh extends StatelessWidget {
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
         if (Platform.isAndroid) {
-          return _buildByStyle(SwipeRefreshStyle.material);
+          return MaterialSwipeRefresh(
+            key: key,
+            childrenDelegate: childrenDelegate,
+            stateStream: stateStream,
+            initState: initState,
+            onRefresh: onRefresh,
+            scrollController: scrollController,
+            backgroundColor: backgroundColor,
+            indicatorColor: indicatorColor,
+            shrinkWrap: shrinkWrap,
+            padding: padding,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            physics: physics,
+            children: children,
+          );
         } else if (Platform.isIOS) {
-          return _buildByStyle(SwipeRefreshStyle.cupertino);
+          return CupertinoSwipeRefresh(
+            key: key,
+            childrenDelegate: childrenDelegate,
+            stateStream: stateStream,
+            initState: initState,
+            onRefresh: onRefresh,
+            scrollController: scrollController,
+            refreshIndicatorExtent: refreshIndicatorExtent,
+            refreshTriggerPullDistance: refreshTriggerPullDistance,
+            indicatorBuilder: indicatorBuilder,
+            shrinkWrap: shrinkWrap,
+            padding: padding,
+            physics: physics,
+            children: children,
+          );
         }
     }
 
