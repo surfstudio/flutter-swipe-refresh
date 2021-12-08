@@ -33,10 +33,10 @@ Refresh indicator widget with Material Design style.
 
 ```dart
 SwipeRefresh.material(
-stateStream: Stream<SwipeRefreshState>(),
-onRefresh: _refresh,
-padding: const EdgeInsets.symmetric(vertical: 10),
-children: <Widget>[ ... ],
+  stateStream: Stream<SwipeRefreshState>(),
+  onRefresh: _refresh,
+  padding: const EdgeInsets.symmetric(vertical: 10),
+  children: <Widget>[ ... ],
 );
 
 Future<void> _refresh() async {
@@ -51,10 +51,10 @@ Refresh indicator widget with Cupertino Design style.
 
 ```dart
 SwipeRefresh.cupertino(
-stateStream: Stream<SwipeRefreshState>(),
-onRefresh: _refresh,
-padding: const EdgeInsets.symmetric(vertical: 10),
-children: <Widget>[ ... ],
+  stateStream: Stream<SwipeRefreshState>(),
+  onRefresh: _refresh,
+  padding: const EdgeInsets.symmetric(vertical: 10),
+  children: <Widget>[ ... ],
 );
 
 Future<void> _refresh() async {
@@ -69,10 +69,10 @@ Refresh indicator widget with adaptive to platform style.
 
 ```dart
 SwipeRefresh.adaptive(
-stateStream: Stream<SwipeRefreshState>(),
-onRefresh: _refresh,
-padding: const EdgeInsets.symmetric(vertical: 10),
-children: <Widget>[ ... ],
+  stateStream: Stream<SwipeRefreshState>(),
+  onRefresh: _refresh,
+  padding: const EdgeInsets.symmetric(vertical: 10),
+  children: <Widget>[ ... ],
 );
 
 Future<void> _refresh() async {
@@ -87,11 +87,11 @@ Refresh indicator widget with adaptive to platform style, and with SliverChildBu
 
 ```dart
 SwipeRefresh.builder(
-stateStream:  Stream<SwipeRefreshState>(),
-onRefresh: _refresh,
-padding: const EdgeInsets.symmetric(vertical: 10),
-itemCount: Colors.primaries.length,
-itemBuilder: (context, index) {
+  stateStream:  Stream<SwipeRefreshState>(),
+  onRefresh: _refresh,
+  padding: const EdgeInsets.symmetric(vertical: 10),
+  itemCount: Colors.primaries.length,
+  itemBuilder: (context, index) {
 return Container(
  ...
    );
