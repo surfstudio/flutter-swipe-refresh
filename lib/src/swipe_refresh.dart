@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:swipe_refresh/src/cupertino_swipe_refresh.dart';
 import 'package:swipe_refresh/src/material_swipe_refresh.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
