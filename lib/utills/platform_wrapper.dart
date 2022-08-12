@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 /// Wrapper for Platform io.
 class PlatformWrapper {
-  bool get isIOS => Platform.isIOS;
+  bool get isIOS => defaultTargetPlatform == TargetPlatform.iOS;
 
-  bool get isAndroid => Platform.isAndroid;
+  bool get isAndroid => defaultTargetPlatform == TargetPlatform.android;
 
   const PlatformWrapper();
 }
