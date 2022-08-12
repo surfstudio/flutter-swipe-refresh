@@ -23,11 +23,18 @@ void main() {
   });
 
   test(
-    'Method isAndroid should return false',
+    'Method isAndroid should return true',
     () {
       final isAndroid = platformWrapper.isAndroid;
 
-      expect(isAndroid, false);
+      // because the target flutter checks the test environment
+      // and by default outputs the platform android
+      // assert(() {
+      //     if (Platform.environment.containsKey('FLUTTER_TEST'))
+      //       result = platform.TargetPlatform.android;
+      //     return true;
+      //   }());
+      expect(isAndroid, true);
     },
   );
 
