@@ -39,7 +39,7 @@ void main() {
     await controller.close();
   });
 
-  Future<void> _onRefresh() async {
+  Future<void> onRefresh() async {
     await Future<void>.delayed(const Duration(seconds: 3));
 
     controller.sink.add(SwipeRefreshState.hidden);
@@ -61,7 +61,7 @@ void main() {
       final testWidget = makeTestableWidget(
         SwipeRefresh.builder(
           stateStream: stream,
-          onRefresh: _onRefresh,
+          onRefresh: onRefresh,
           itemCount: listColors.length,
           itemBuilder: (_, index) => Container(
             color: listColors[index],
