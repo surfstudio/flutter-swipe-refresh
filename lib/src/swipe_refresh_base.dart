@@ -52,7 +52,8 @@ abstract class SwipeRefreshBase extends StatefulWidget {
   SwipeRefreshBaseState createState();
 }
 
-abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase> extends State<T> {
+abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
+    extends State<T> {
   @protected
   final GlobalKey refreshKey = GlobalKey();
 
