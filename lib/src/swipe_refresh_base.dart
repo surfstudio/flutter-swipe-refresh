@@ -52,8 +52,7 @@ abstract class SwipeRefreshBase extends StatefulWidget {
   SwipeRefreshBaseState createState();
 }
 
-abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
-    extends State<T> {
+abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase> extends State<T> {
   @protected
   final GlobalKey refreshKey = GlobalKey();
 
@@ -77,37 +76,6 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     _stateSubscription = widget.stateStream.listen(_updateState);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // ignore: avoid-returning-widgets
-    return buildRefresher(refreshKey, widget.children ?? [], _onRefresh);
-  }
-
-  @override
-  void dispose() {
-    _stateSubscription?.cancel();
-
-    super.dispose();
-  }
-
-  @protected
-  Widget buildRefresher(
-    Key key,
-    List<Widget> children,
-    Future<void> Function() onRefresh,
-  );
-
-  @protected
-  void onUpdateState(SwipeRefreshState state);
-
-  @protected
-  Future<void> _onRefresh() {
-    _updateState(SwipeRefreshState.loading);
-    widget.onRefresh();
-    completer = Completer<void>();
-    return completer!.future;
-  }
-
   void _updateState(SwipeRefreshState newState) {
     if (currentState != newState) {
       setState(
@@ -119,4 +87,34 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
       );
     }
   }
+
+  @protected
+  Future<void> _onRefresh() {
+    _updateState(SwipeRefreshState.loading);
+    widget.onRefresh();
+    completer = Completer<void>();
+    return completer!.future;
+  }
+
+  @override
+  void dispose() {
+    _stateSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: avoid-returning-widgets
+    return buildRefresher(refreshKey, widget.children ?? [], _onRefresh);
+  }
+
+  @protected
+  Widget buildRefresher(
+    Key key,
+    List<Widget> children,
+    Future<void> Function() onRefresh,
+  );
+
+  @protected
+  void onUpdateState(SwipeRefreshState state);
 }

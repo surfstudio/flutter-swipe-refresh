@@ -52,18 +52,18 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
   const MaterialSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    Key? key,
     this.indicatorColor,
     List<Widget>? children,
     SliverChildDelegate? childrenDelegate,
     SwipeRefreshState? initState,
     Color? backgroundColor,
-    ScrollController? scrollController,
     EdgeInsets? padding,
+    ScrollController? scrollController,
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
-  })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
+    Key? key,
+  })  : backgroundColor = backgroundColor ?? Colors.white,
         super(
           key: key,
           children: children,
@@ -79,11 +79,10 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
         );
 
   @override
-  _MaterialSwipeRefreshState createState() => _MaterialSwipeRefreshState();
+  SwipeRefreshBaseState createState() => _MaterialSwipeRefreshState();
 }
 
-class _MaterialSwipeRefreshState
-    extends SwipeRefreshBaseState<MaterialSwipeRefresh> {
+class _MaterialSwipeRefreshState extends SwipeRefreshBaseState<MaterialSwipeRefresh> {
   @override
   Widget buildRefresher(
     Key key,
@@ -101,8 +100,8 @@ class _MaterialSwipeRefreshState
               padding: widget.padding,
               controller: widget.scrollController ?? ScrollController(),
               physics: AlwaysScrollableScrollPhysics(parent: widget.physics),
-              keyboardDismissBehavior: widget.keyboardDismissBehavior ??
-                  ScrollViewKeyboardDismissBehavior.manual,
+              keyboardDismissBehavior:
+                  widget.keyboardDismissBehavior ?? ScrollViewKeyboardDismissBehavior.manual,
               children: children,
             )
           : ListView.custom(
@@ -110,8 +109,8 @@ class _MaterialSwipeRefreshState
               padding: widget.padding,
               childrenDelegate: widget.childrenDelegate!,
               controller: widget.scrollController ?? ScrollController(),
-              keyboardDismissBehavior: widget.keyboardDismissBehavior ??
-                  ScrollViewKeyboardDismissBehavior.manual,
+              keyboardDismissBehavior:
+                  widget.keyboardDismissBehavior ?? ScrollViewKeyboardDismissBehavior.manual,
               physics: AlwaysScrollableScrollPhysics(parent: widget.physics),
             ),
     );
