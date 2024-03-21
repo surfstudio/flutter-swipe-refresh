@@ -52,18 +52,18 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
   const MaterialSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    Key? key,
     this.indicatorColor,
     List<Widget>? children,
     SliverChildDelegate? childrenDelegate,
     SwipeRefreshState? initState,
     Color? backgroundColor,
-    ScrollController? scrollController,
     EdgeInsets? padding,
+    ScrollController? scrollController,
     bool shrinkWrap = false,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
-  })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
+    Key? key,
+  })  : backgroundColor = backgroundColor ?? Colors.white,
         super(
           key: key,
           children: children,
@@ -79,7 +79,7 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
         );
 
   @override
-  _MaterialSwipeRefreshState createState() => _MaterialSwipeRefreshState();
+  SwipeRefreshBaseState createState() => _MaterialSwipeRefreshState();
 }
 
 class _MaterialSwipeRefreshState

@@ -53,18 +53,18 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
   const CupertinoSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    Key? key,
-    SliverChildDelegate? childrenDelegate,
+    this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
+    this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
+    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
     List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     SwipeRefreshState? initState,
     EdgeInsets? padding,
     ScrollController? scrollController,
     bool shrinkWrap = false,
-    this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
-    this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
-    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    Key? key,
   }) : super(
           key: key,
           children: children,
@@ -72,27 +72,26 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
-          padding: padding,
           scrollController: scrollController,
+          padding: padding,
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
         );
 
   @override
-  // ignore: no_logic_in_create_state
-  SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState(
-        scrollController,
-      );
+  SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState();
 }
 
 class _CupertinoSwipeRefreshState
     extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
-  final ScrollController _scrollController;
+  late final ScrollController _scrollController;
 
-  _CupertinoSwipeRefreshState(
-    ScrollController? scrollController,
-  ) : _scrollController = scrollController ?? ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = widget.scrollController ?? ScrollController();
+  }
 
   @override
   Widget buildRefresher(
