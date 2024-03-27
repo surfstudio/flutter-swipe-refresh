@@ -85,6 +85,14 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
 
 class _MaterialSwipeRefreshState
     extends SwipeRefreshBaseState<MaterialSwipeRefresh> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = widget.scrollController ?? ScrollController();
+  }
+
   @override
   Widget buildRefresher(
     Key key,
@@ -106,7 +114,7 @@ class _MaterialSwipeRefreshState
             ? ListView(
                 shrinkWrap: widget.shrinkWrap,
                 padding: widget.padding,
-                controller: widget.scrollController ?? ScrollController(),
+                controller: _scrollController,
                 physics: AlwaysScrollableScrollPhysics(parent: widget.physics),
                 keyboardDismissBehavior: widget.keyboardDismissBehavior ??
                     ScrollViewKeyboardDismissBehavior.manual,
@@ -116,7 +124,7 @@ class _MaterialSwipeRefreshState
                 shrinkWrap: widget.shrinkWrap,
                 padding: widget.padding,
                 childrenDelegate: widget.childrenDelegate!,
-                controller: widget.scrollController ?? ScrollController(),
+                controller: _scrollController,
                 keyboardDismissBehavior: widget.keyboardDismissBehavior ??
                     ScrollViewKeyboardDismissBehavior.manual,
                 physics: AlwaysScrollableScrollPhysics(parent: widget.physics),
