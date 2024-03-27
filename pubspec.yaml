@@ -1,5 +1,5 @@
 name: swipe_refresh
-version: 1.0.2
+version: 1.0.5
 description: Set of widgets provides make refresh by using pull down gesture.
 repository: "https://github.com/surfstudio/flutter-swipe-refresh"
 issue_tracker: "https://github.com/surfstudio/flutter-swipe-refresh/issues"
@@ -12,9 +12,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.2.0
-  surf_lint_rules: ^1.5.0
+  surf_lint_rules: ^2.0.0
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 flutter:
+  uses-material-design: true

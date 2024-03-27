@@ -43,28 +43,21 @@ import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 /// [physics] - defines the physics of the scroll(if == null it will be
 /// [AlwaysScrollableScrollPhysics]).
 class CupertinoSwipeRefresh extends SwipeRefreshBase {
-  static const double defaultRefreshTriggerPullDistance = 100.0;
-  static const double defaultRefreshIndicatorExtent = 60.0;
-
-  final double refreshTriggerPullDistance;
-  final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
-
   const CupertinoSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    Key? key,
-    SliverChildDelegate? childrenDelegate,
+    this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
+    this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
+    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
     List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     SwipeRefreshState? initState,
     EdgeInsets? padding,
     ScrollController? scrollController,
     bool shrinkWrap = false,
-    this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
-    this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
-    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    Key? key,
   }) : super(
           key: key,
           children: children,
@@ -72,27 +65,33 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
-          padding: padding,
           scrollController: scrollController,
+          padding: padding,
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
         );
 
+  static const double defaultRefreshTriggerPullDistance = 100.0;
+  static const double defaultRefreshIndicatorExtent = 60.0;
+
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
+  final RefreshControlIndicatorBuilder indicatorBuilder;
+
   @override
-  // ignore: no_logic_in_create_state
-  SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState(
-        scrollController,
-      );
+  SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState();
 }
 
 class _CupertinoSwipeRefreshState
     extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
-  final ScrollController _scrollController;
+  late final ScrollController _scrollController;
 
-  _CupertinoSwipeRefreshState(
-    ScrollController? scrollController,
-  ) : _scrollController = scrollController ?? ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = widget.scrollController ?? ScrollController();
+  }
 
   @override
   Widget buildRefresher(
@@ -103,6 +102,7 @@ class _CupertinoSwipeRefreshState
     return CustomScrollView(
       shrinkWrap: widget.shrinkWrap,
       controller: _scrollController,
+      scrollBehavior: scrollBehavior,
       keyboardDismissBehavior: widget.keyboardDismissBehavior ??
           ScrollViewKeyboardDismissBehavior.onDrag,
       physics: widget.physics == null
@@ -145,16 +145,16 @@ class _CupertinoSwipeRefreshState
 }
 
 class _ListChildrenWidget extends StatelessWidget {
-  final List<Widget> children;
-  final EdgeInsets? padding;
-  final SliverChildDelegate? childrenDelegate;
-
   const _ListChildrenWidget({
     required this.children,
     Key? key,
     this.padding,
     this.childrenDelegate,
   }) : super(key: key);
+
+  final List<Widget> children;
+  final EdgeInsets? padding;
+  final SliverChildDelegate? childrenDelegate;
 
   @override
   Widget build(BuildContext context) {

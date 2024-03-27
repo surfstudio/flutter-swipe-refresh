@@ -27,6 +27,12 @@ void main() {
   late Stream<SwipeRefreshState> stream;
   late MockOnRefreshFunction onRefreshFunction;
   late ScrollPhysics scrollPhysics;
+  final children = _listColors
+      .map((e) => Container(
+            color: e,
+            height: 100,
+          ))
+      .toList();
 
   setUp(() {
     streamController = StreamController<SwipeRefreshState>.broadcast();
@@ -34,7 +40,7 @@ void main() {
 
     onRefreshFunction = MockOnRefreshFunction();
     when(() => onRefreshFunction.call()).thenAnswer(
-      (invocation) async {
+      (invocation) {
         return streamController.sink.add(SwipeRefreshState.hidden);
       },
     );
@@ -47,13 +53,6 @@ void main() {
       await streamController.close();
     },
   );
-
-  final listColors = [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.amber,
-  ];
 
   testWidgets(
     'When trying to return a CupertinoSwipeRefresh with no children or '
@@ -80,14 +79,7 @@ void main() {
         SwipeRefresh.cupertino(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -107,14 +99,7 @@ void main() {
         SwipeRefresh.cupertino(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -134,6 +119,7 @@ void main() {
     'When drag down enough, the refresh should start and end after 3 seconds',
     (tester) async {
       const key = Key('Test key');
+      final findKey = find.byKey(key);
 
       final cupertinoSwipeRefresh = makeTestableWidget(
         SwipeRefresh.cupertino(
@@ -150,14 +136,7 @@ void main() {
               key: key,
             );
           },
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -171,12 +150,12 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byKey(key), findsOneWidget);
+      expect(findKey, findsOneWidget);
 
       await tester.pump(const Duration(seconds: 3));
       await tester.pump();
 
-      expect(find.byKey(key), findsNothing);
+      expect(findKey, findsNothing);
     },
   );
 
@@ -191,14 +170,7 @@ void main() {
         SwipeRefresh.cupertino(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -217,14 +189,7 @@ void main() {
       final cupertinoWidget = SwipeRefresh.cupertino(
         stateStream: stream,
         onRefresh: onRefreshFunction,
-        children: listColors
-            .map(
-              (e) => Container(
-                color: e,
-                height: 100,
-              ),
-            )
-            .toList(),
+        children: children,
         initState: SwipeRefreshState.loading,
       );
 
@@ -251,14 +216,7 @@ void main() {
       final cupertinoWidget = SwipeRefresh.cupertino(
         stateStream: stream,
         onRefresh: onRefreshFunction,
-        children: listColors
-            .map(
-              (e) => Container(
-                color: e,
-                height: 100,
-              ),
-            )
-            .toList(),
+        children: children,
         initState: SwipeRefreshState.loading,
         physics: scrollPhysics,
       );
@@ -287,14 +245,7 @@ void main() {
         SwipeRefresh.cupertino(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -302,29 +253,25 @@ void main() {
         SwipeRefresh.cupertino(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
           padding: const EdgeInsets.only(top: 16.0),
         ),
       );
 
+      final findSliverList = find.byType(SliverList);
+      final findSliverPadding = find.byType(SliverPadding);
+
       await tester.pumpWidget(cupertinoWidgetWithoutPadding);
 
-      expect(find.byType(SliverList), findsOneWidget);
+      expect(findSliverList, findsOneWidget);
       // Must find one widget create by SliverSafeArea.
-      expect(find.byType(SliverPadding), findsOneWidget);
+      expect(findSliverPadding, findsOneWidget);
 
       await tester.pumpWidget(cupertinoWidgetWithPadding);
 
-      expect(find.byType(SliverList), findsOneWidget);
+      expect(findSliverList, findsOneWidget);
       // Must find two widgets(create by SliverSafeArea and create by SwipeRefresh.cupertino).
-      expect(find.byType(SliverPadding), findsNWidgets(2));
+      expect(findSliverPadding, findsNWidgets(2));
     },
   );
 }
@@ -332,3 +279,10 @@ void main() {
 class MockOnRefreshFunction extends Mock {
   void call();
 }
+
+const _listColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.amber,
+];

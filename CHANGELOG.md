@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5
+* Added support for all TargetPlatform.
+* SDK version is up.
+
 ## 1.0.2
 
 * Internal improvements.

@@ -39,7 +39,7 @@ void main() {
     await controller.close();
   });
 
-  Future<void> _onRefresh() async {
+  Future<void> onRefresh() async {
     await Future<void>.delayed(const Duration(seconds: 3));
 
     controller.sink.add(SwipeRefreshState.hidden);
@@ -55,13 +55,15 @@ void main() {
   testWidgets(
     'SwipeRefresh.builder with itemBuilder as argument builds normally(iOS platform as example)',
     (tester) async {
-      when(() => platformWrapper.isAndroid).thenReturn(false);
-      when(() => platformWrapper.isIOS).thenReturn(true);
+      when(() => platformWrapper.isMaterial).thenReturn(false);
+      when(() => platformWrapper.isCupertino).thenReturn(true);
 
       final testWidget = makeTestableWidget(
         SwipeRefresh.builder(
           stateStream: stream,
-          onRefresh: _onRefresh,
+          onRefresh: () {
+            onRefresh().ignore();
+          },
           itemCount: listColors.length,
           itemBuilder: (_, index) => Container(
             color: listColors[index],
