@@ -16,9 +16,21 @@ import 'package:flutter/foundation.dart';
 
 /// Wrapper for Platform io.
 class PlatformWrapper {
-  bool get isIOS => defaultTargetPlatform == TargetPlatform.iOS;
+  bool get isCupertino => _cupertino.contains(defaultTargetPlatform);
 
-  bool get isAndroid => defaultTargetPlatform == TargetPlatform.android;
+  bool get isMaterial => _material.contains(defaultTargetPlatform);
 
   const PlatformWrapper();
 }
+
+const _cupertino = <TargetPlatform>[
+  TargetPlatform.iOS,
+  TargetPlatform.macOS,
+];
+
+const _material = <TargetPlatform>[
+  TargetPlatform.android,
+  TargetPlatform.fuchsia,
+  TargetPlatform.linux,
+  TargetPlatform.windows,
+];
