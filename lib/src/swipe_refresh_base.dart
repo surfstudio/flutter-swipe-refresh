@@ -14,22 +14,13 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
+import 'package:swipe_refresh/src/widgets/scroll_behavior_in_web.dart';
 
 /// Base refresh indicator widget.
 abstract class SwipeRefreshBase extends StatefulWidget {
-  final List<Widget>? children;
-  final VoidCallback onRefresh;
-  final SwipeRefreshState? initState;
-  final Stream<SwipeRefreshState> stateStream;
-  final ScrollController? scrollController;
-  final SliverChildDelegate? childrenDelegate;
-  final EdgeInsets? padding;
-  final bool shrinkWrap;
-  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
-  final ScrollPhysics? physics;
-
   const SwipeRefreshBase({
     required this.stateStream,
     required this.onRefresh,
@@ -46,6 +37,17 @@ abstract class SwipeRefreshBase extends StatefulWidget {
             (children != null || childrenDelegate != null)),
         super(key: key);
 
+  final List<Widget>? children;
+  final VoidCallback onRefresh;
+  final SwipeRefreshState? initState;
+  final Stream<SwipeRefreshState> stateStream;
+  final ScrollController? scrollController;
+  final SliverChildDelegate? childrenDelegate;
+  final EdgeInsets? padding;
+  final bool shrinkWrap;
+  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
+  final ScrollPhysics? physics;
+
   @override
   @protected
   // ignore: no_logic_in_create_state
@@ -56,6 +58,9 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     extends State<T> {
   @protected
   final GlobalKey refreshKey = GlobalKey();
+
+  @protected
+  late final MaterialScrollBehavior? scrollBehavior;
 
   @protected
   Completer<void>? completer;
@@ -75,6 +80,7 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     }
 
     _stateSubscription = widget.stateStream.listen(_updateState);
+    scrollBehavior = _getScrollBehavior();
   }
 
   void _updateState(SwipeRefreshState newState) {
@@ -95,6 +101,21 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     widget.onRefresh();
     completer = Completer<void>();
     return completer!.future;
+  }
+
+  MaterialScrollBehavior? _getScrollBehavior() {
+    final behaviorInWeb = ScrollBehaviorInWeb();
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+        return null;
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return behaviorInWeb;
+    }
   }
 
   @override
