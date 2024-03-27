@@ -18,26 +18,46 @@ import 'package:flutter/cupertino.dart';
 import 'package:swipe_refresh/src/swipe_refresh_base.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 
-// ignore_for_file: avoid-returning-widgets
-
 /// Refresh indicator widget with Cupertino style.
+/// [stateStream] - indicator state([SwipeRefreshState.loading] or
+/// [SwipeRefreshState.hidden]).
+/// [onRefresh] - callback invoked when pulled by [refreshTriggerPullDistance].
+/// [children] - list of any widgets.
+/// [childrenDelegate] - pass the inheritor to SliverChildDelegate to avoid
+/// creating more children than are visible through the [Viewport].
+/// [initState] - initialization state([SwipeRefreshState.loading] or
+/// [SwipeRefreshState.hidden]).
+/// [padding] - passed to add [SliverPadding].
+/// [scrollController] - ScrollController for [CustomScrollView].
+/// [shrinkWrap] - Whether the extent of the scroll view should be determined
+/// by the contents being viewed(default - false).
+/// [refreshTriggerPullDistance] - The amount of overscroll the scrollable
+/// must be dragged to trigger a reload(default - [defaultRefreshTriggerPullDistance]).
+/// [refreshIndicatorExtent] - amount of space the refresh indicator
+/// sliver will keep holding while [onRefresh] is still running.
+/// [indicatorBuilder] - builder that's called as this sliver's size changes,
+/// and as the state changes(default - [CupertinoSliverRefreshControl.buildRefreshIndicator]).
+/// [keyboardDismissBehavior] - [ScrollViewKeyboardDismissBehavior]
+/// the defines how this [ScrollView] will dismiss the keyboard automatically.
+/// (if == null it will be [ScrollViewKeyboardDismissBehavior.onDrag]).
+/// [physics] - defines the physics of the scroll(if == null it will be
+/// [AlwaysScrollableScrollPhysics]).
 class CupertinoSwipeRefresh extends SwipeRefreshBase {
   const CupertinoSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
-    Key? key,
-    SliverChildDelegate? childrenDelegate,
+    this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
+    this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
+    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
     List<Widget>? children,
+    SliverChildDelegate? childrenDelegate,
     SwipeRefreshState? initState,
     EdgeInsets? padding,
     ScrollController? scrollController,
     bool shrinkWrap = false,
-    this.refreshTriggerPullDistance = defaultRefreshTriggerPullDistance,
-    this.refreshIndicatorExtent = defaultRefreshIndicatorExtent,
-    this.indicatorBuilder = CupertinoSliverRefreshControl.buildRefreshIndicator,
-    //FIXME add parameter to CustomScrollView, when fix it in Flutter
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
+    Key? key,
     this.cacheExtent,
   }) : super(
           key: key,
@@ -46,8 +66,8 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
           stateStream: stateStream,
           initState: initState,
           onRefresh: onRefresh,
-          padding: padding,
           scrollController: scrollController,
+          padding: padding,
           shrinkWrap: shrinkWrap,
           keyboardDismissBehavior: keyboardDismissBehavior,
           physics: physics,
@@ -62,19 +82,18 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
   final double? cacheExtent;
 
   @override
-  // ignore: no_logic_in_create_state
-  SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState(
-        scrollController,
-      );
+  SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState();
 }
 
 class _CupertinoSwipeRefreshState
     extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
-  _CupertinoSwipeRefreshState(
-    ScrollController? scrollController,
-  ) : _scrollController = scrollController ?? ScrollController();
+  late final ScrollController _scrollController;
 
-  final ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = widget.scrollController ?? ScrollController();
+  }
 
   @override
   Widget buildRefresher(
@@ -85,6 +104,9 @@ class _CupertinoSwipeRefreshState
     return CustomScrollView(
       shrinkWrap: widget.shrinkWrap,
       controller: _scrollController,
+      scrollBehavior: scrollBehavior,
+      keyboardDismissBehavior: widget.keyboardDismissBehavior ??
+          ScrollViewKeyboardDismissBehavior.onDrag,
       cacheExtent: widget.cacheExtent,
       physics: widget.physics == null
           ? const BouncingScrollPhysics(
@@ -104,7 +126,11 @@ class _CupertinoSwipeRefreshState
           left: widget.padding == null,
           right: widget.padding == null,
           top: widget.padding == null,
-          sliver: _buildList(children),
+          sliver: _ListChildrenWidget(
+            children: children,
+            padding: widget.padding,
+            childrenDelegate: widget.childrenDelegate,
+          ),
         ),
       ],
     );
@@ -112,10 +138,6 @@ class _CupertinoSwipeRefreshState
 
   @override
   void onUpdateState(SwipeRefreshState state) {
-    if (state == SwipeRefreshState.loading) {
-      _scrollController.jumpTo(-(widget.refreshIndicatorExtent + 5));
-    }
-
     if (state == SwipeRefreshState.hidden) {
       if (completer != null) {
         completer!.complete();
@@ -123,13 +145,27 @@ class _CupertinoSwipeRefreshState
       }
     }
   }
+}
 
-  Widget _buildList(List<Widget> children) {
-    if (widget.padding != null) {
+class _ListChildrenWidget extends StatelessWidget {
+  const _ListChildrenWidget({
+    required this.children,
+    Key? key,
+    this.padding,
+    this.childrenDelegate,
+  }) : super(key: key);
+
+  final List<Widget> children;
+  final EdgeInsets? padding;
+  final SliverChildDelegate? childrenDelegate;
+
+  @override
+  Widget build(BuildContext context) {
+    if (padding != null) {
       return SliverPadding(
-        padding: widget.padding!,
+        padding: padding!,
         sliver: SliverList(
-          delegate: widget.childrenDelegate ??
+          delegate: childrenDelegate ??
               SliverChildListDelegate(
                 children,
               ),
@@ -137,7 +173,7 @@ class _CupertinoSwipeRefreshState
       );
     }
     return SliverList(
-      delegate: widget.childrenDelegate ??
+      delegate: childrenDelegate ??
           SliverChildListDelegate(
             children,
           ),

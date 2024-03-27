@@ -14,4 +14,5 @@
 
 import 'package:flutter/material.dart';
 
+// ignore: avoid-returning-widgets
 Widget makeTestableWidget(Widget widget) => MaterialApp(home: widget);

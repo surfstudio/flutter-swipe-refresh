@@ -1,14 +1,19 @@
 # Changelog
 
-## MINOR
+## 1.0.5
+* Added support for all TargetPlatform.
+* Added cacheExtent property
+* SDK version is up.
 
-* add cacheExtent property
+## 1.0.2
 
-## 1.0.1 - 2021-05-30
+* Internal improvements.
+
+## 1.0.1
 
 * Stable release
 
-## 1.0.1-dev.1 - 2021-05-25
+## 1.0.1-dev.1
 
 * Apply new lint rules.
 

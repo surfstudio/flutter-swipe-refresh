@@ -14,8 +14,10 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:swipe_refresh/src/swipe_refresh_state.dart';
+import 'package:swipe_refresh/src/widgets/scroll_behavior_in_web.dart';
 
 /// Base refresh indicator widget.
 abstract class SwipeRefreshBase extends StatefulWidget {
@@ -55,30 +57,79 @@ abstract class SwipeRefreshBase extends StatefulWidget {
 abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
     extends State<T> {
   @protected
-  Completer<void>? completer;
-  @protected
   final GlobalKey refreshKey = GlobalKey();
-  StreamSubscription<SwipeRefreshState>? _stateSubscription;
 
-  SwipeRefreshState _currentState = SwipeRefreshState.hidden;
+  @protected
+  late final MaterialScrollBehavior? scrollBehavior;
+
+  @protected
+  Completer<void>? completer;
+
+  @visibleForTesting
+  @protected
+  SwipeRefreshState currentState = SwipeRefreshState.hidden;
+
+  StreamSubscription<SwipeRefreshState>? _stateSubscription;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.initState != null) {
-      _currentState = widget.initState!;
+      currentState = widget.initState!;
     }
 
     _stateSubscription = widget.stateStream.listen(_updateState);
+    scrollBehavior = _getScrollBehavior();
+  }
+
+  void _updateState(SwipeRefreshState newState) {
+    if (currentState != newState) {
+      setState(
+        () {
+          currentState = newState;
+
+          onUpdateState(currentState);
+        },
+      );
+    }
+  }
+
+  @protected
+  Future<void> _onRefresh() {
+    _updateState(SwipeRefreshState.loading);
+    widget.onRefresh();
+    completer = Completer<void>();
+    return completer!.future;
+  }
+
+  MaterialScrollBehavior? _getScrollBehavior() {
+    final behaviorInWeb = ScrollBehaviorInWeb();
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+        return null;
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return behaviorInWeb;
+    }
+  }
+
+  @override
+  void dispose() {
+    _stateSubscription?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid-returning-widgets
     return buildRefresher(refreshKey, widget.children ?? [], _onRefresh);
   }
 
-  // ignore: avoid-returning-widgets
   @protected
   Widget buildRefresher(
     Key key,
@@ -88,31 +139,4 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
 
   @protected
   void onUpdateState(SwipeRefreshState state);
-
-  void _updateState(SwipeRefreshState newState) {
-    if (_currentState != newState) {
-      setState(
-        () {
-          _currentState = newState;
-
-          onUpdateState(_currentState);
-        },
-      );
-    }
-  }
-
-  @protected
-  Future<void> _onRefresh() {
-    _currentState = SwipeRefreshState.loading;
-    widget.onRefresh();
-    completer = Completer<void>();
-    return completer!.future;
-  }
-
-  @override
-  void dispose() {
-    _stateSubscription?.cancel();
-
-    super.dispose();
-  }
 }
