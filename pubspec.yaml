@@ -18,7 +18,4 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 flutter:
-
-platforms:
-  android:
-  ios:
+  uses-material-design: true
