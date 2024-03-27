@@ -26,6 +26,12 @@ void main() {
   late StreamController<SwipeRefreshState> controller;
   late Stream<SwipeRefreshState> stream;
   late MockPlatformWrapper platformWrapper;
+  final children = _listColors
+      .map((e) => Container(
+            color: e,
+            height: 100,
+          ))
+      .toList();
 
   setUp(() {
     controller = StreamController<SwipeRefreshState>.broadcast();
@@ -44,59 +50,19 @@ void main() {
     controller.sink.add(SwipeRefreshState.hidden);
   }
 
-  final listColors = [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.amber,
-  ];
-
-  testWidgets(
-    'When call SwipeRefresh.adaptive not on Android or iOS platform should build normally with one Container',
-    (tester) async {
-      when(() => platformWrapper.isAndroid).thenReturn(false);
-      when(() => platformWrapper.isIOS).thenReturn(false);
-
-      final adaptiveSwipeRefresh = makeTestableWidget(
-        SwipeRefresh.adaptive(
-          stateStream: stream,
-          onRefresh: onRefresh,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
-          platform: platformWrapper,
-        ),
-      );
-
-      await tester.pumpWidget(adaptiveSwipeRefresh);
-
-      expect(() => adaptiveSwipeRefresh, returnsNormally);
-      expect(find.byType(Container), findsOneWidget);
-    },
-  );
-
   testWidgets(
     'When call SwipeRefresh.adaptive on Android platform should build MaterialSwipeRefresh',
     (tester) async {
-      when(() => platformWrapper.isAndroid).thenReturn(true);
+      when(() => platformWrapper.isMaterial).thenReturn(true);
+      when(() => platformWrapper.isCupertino).thenReturn(false);
 
       final adaptiveSwipeRefresh = makeTestableWidget(
         SwipeRefresh.adaptive(
           stateStream: stream,
-          onRefresh: onRefresh,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          onRefresh: () {
+            onRefresh().ignore();
+          },
+          children: children,
           platform: platformWrapper,
         ),
       );
@@ -111,21 +77,16 @@ void main() {
   testWidgets(
     'When call SwipeRefresh.adaptive on iOS platform should build CupertinoSwipeRefresh',
     (tester) async {
-      when(() => platformWrapper.isAndroid).thenReturn(false);
-      when(() => platformWrapper.isIOS).thenReturn(true);
+      when(() => platformWrapper.isMaterial).thenReturn(false);
+      when(() => platformWrapper.isCupertino).thenReturn(true);
 
       final adaptiveSwipeRefresh = makeTestableWidget(
         SwipeRefresh.adaptive(
           stateStream: stream,
-          onRefresh: onRefresh,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          onRefresh: () {
+            onRefresh().ignore();
+          },
+          children: children,
           platform: platformWrapper,
         ),
       );
@@ -139,3 +100,10 @@ void main() {
 }
 
 class MockPlatformWrapper extends Mock implements PlatformWrapper {}
+
+const _listColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.amber,
+];

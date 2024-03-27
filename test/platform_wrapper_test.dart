@@ -25,15 +25,17 @@ void main() {
   test(
     'Method isAndroid should return true',
     () {
-      final isAndroid = platformWrapper.isAndroid;
+      final isAndroid = platformWrapper.isMaterial;
 
-      // because the target flutter checks the test environment
-      // and by default outputs the platform android
-      // assert(() {
-      //     if (Platform.environment.containsKey('FLUTTER_TEST'))
-      //       result = platform.TargetPlatform.android;
-      //     return true;
-      //   }());
+      /// Because the target flutter checks the test environment and by default outputs
+      /// the platform android.
+      /*
+      assert(() {
+          if (Platform.environment.containsKey('FLUTTER_TEST'))
+            result = platform.TargetPlatform.android;
+          return true;
+        }());
+       */
       expect(isAndroid, true);
     },
   );
@@ -41,7 +43,7 @@ void main() {
   test(
     'Method isIOS should return false',
     () {
-      final isIOS = platformWrapper.isIOS;
+      final isIOS = platformWrapper.isCupertino;
 
       expect(isIOS, false);
     },

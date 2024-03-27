@@ -27,6 +27,12 @@ void main() {
   late Stream<SwipeRefreshState> stream;
   late MockOnRefreshFunction onRefreshFunction;
   late TestSliverChildListDelegate sliverChildDelegate;
+  final children = _listColors
+      .map((e) => Container(
+            color: e,
+            height: 100,
+          ))
+      .toList();
 
   setUp(() {
     controller = StreamController<SwipeRefreshState>.broadcast();
@@ -35,7 +41,7 @@ void main() {
 
     onRefreshFunction = MockOnRefreshFunction();
     when(() => onRefreshFunction.call()).thenAnswer(
-      (invocation) async {
+      (invocation) {
         return controller.sink.add(SwipeRefreshState.hidden);
       },
     );
@@ -44,13 +50,6 @@ void main() {
   tearDown(() async {
     await controller.close();
   });
-
-  final listColors = [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.amber,
-  ];
 
   testWidgets(
     'When trying create MaterialSwipeRefresh without children or '
@@ -77,14 +76,7 @@ void main() {
         SwipeRefresh.material(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -106,14 +98,7 @@ void main() {
         SwipeRefresh.material(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
@@ -137,32 +122,28 @@ void main() {
         SwipeRefresh.material(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
 
+      final findSwipeRefresh = find.byType(SwipeRefresh);
+      final findRefreshProgressIndicator = find.byType(RefreshProgressIndicator);
+
       await tester.pumpWidget(materialSwipeRefresh);
       await tester.drag(
-        find.byType(SwipeRefresh),
+        findSwipeRefresh,
         const Offset(0, 300),
         touchSlopY: 0,
       );
       await tester.pump();
 
-      expect(find.byType(RefreshProgressIndicator), findsOneWidget);
+      expect(findRefreshProgressIndicator, findsOneWidget);
 
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 2));
 
-      expect(find.byType(RefreshProgressIndicator), findsNothing);
+      expect(findRefreshProgressIndicator, findsNothing);
     },
   );
 
@@ -173,14 +154,7 @@ void main() {
         SwipeRefresh.material(
           stateStream: stream,
           onRefresh: onRefreshFunction,
-          children: listColors
-              .map(
-                (e) => Container(
-                  color: e,
-                  height: 100,
-                ),
-              )
-              .toList(),
+          children: children,
         ),
       );
       await tester.pumpWidget(materialSwipeRefresh);
@@ -202,14 +176,7 @@ void main() {
       final materialWidget = SwipeRefresh.material(
         stateStream: stream,
         onRefresh: onRefreshFunction,
-        children: listColors
-            .map(
-              (e) => Container(
-                color: e,
-                height: 100,
-              ),
-            )
-            .toList(),
+        children: children,
         initState: SwipeRefreshState.loading,
       );
       final materialSwipeRefresh = makeTestableWidget(materialWidget);
@@ -252,3 +219,10 @@ class MockOnRefreshFunction extends Mock {
 class TestSliverChildListDelegate extends SliverChildListDelegate {
   TestSliverChildListDelegate(List<Widget> children) : super(children);
 }
+
+const _listColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.amber,
+];
