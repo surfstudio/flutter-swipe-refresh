@@ -43,13 +43,6 @@ import 'package:swipe_refresh/src/swipe_refresh_state.dart';
 /// [physics] - defines the physics of the scroll(if == null it will be
 /// [AlwaysScrollableScrollPhysics]).
 class CupertinoSwipeRefresh extends SwipeRefreshBase {
-  static const double defaultRefreshTriggerPullDistance = 100.0;
-  static const double defaultRefreshIndicatorExtent = 60.0;
-
-  final double refreshTriggerPullDistance;
-  final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
-
   const CupertinoSwipeRefresh({
     required Stream<SwipeRefreshState> stateStream,
     required VoidCallback onRefresh,
@@ -79,12 +72,18 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
           physics: physics,
         );
 
+  static const double defaultRefreshTriggerPullDistance = 100.0;
+  static const double defaultRefreshIndicatorExtent = 60.0;
+
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
+  final RefreshControlIndicatorBuilder indicatorBuilder;
+
   @override
   SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState();
 }
 
-class _CupertinoSwipeRefreshState
-    extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
+class _CupertinoSwipeRefreshState extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
   late final ScrollController _scrollController;
 
   @override
@@ -102,8 +101,9 @@ class _CupertinoSwipeRefreshState
     return CustomScrollView(
       shrinkWrap: widget.shrinkWrap,
       controller: _scrollController,
-      keyboardDismissBehavior: widget.keyboardDismissBehavior ??
-          ScrollViewKeyboardDismissBehavior.onDrag,
+      scrollBehavior: scrollBehavior,
+      keyboardDismissBehavior:
+          widget.keyboardDismissBehavior ?? ScrollViewKeyboardDismissBehavior.onDrag,
       physics: widget.physics == null
           ? const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -144,16 +144,16 @@ class _CupertinoSwipeRefreshState
 }
 
 class _ListChildrenWidget extends StatelessWidget {
-  final List<Widget> children;
-  final EdgeInsets? padding;
-  final SliverChildDelegate? childrenDelegate;
-
   const _ListChildrenWidget({
     required this.children,
     Key? key,
     this.padding,
     this.childrenDelegate,
   }) : super(key: key);
+
+  final List<Widget> children;
+  final EdgeInsets? padding;
+  final SliverChildDelegate? childrenDelegate;
 
   @override
   Widget build(BuildContext context) {
