@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.5
+## 1.1.0
 * Added support for all TargetPlatform.
 * Added cacheExtent property
 * SDK version is up.
