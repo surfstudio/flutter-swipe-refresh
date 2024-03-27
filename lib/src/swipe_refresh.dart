@@ -28,24 +28,6 @@ import 'package:swipe_refresh/utills/platform_wrapper.dart';
 /// [refreshTriggerPullDistance], [refreshIndicatorExtent], [indicatorBuilder]
 /// (more details [CupertinoSwipeRefresh]).
 class SwipeRefresh extends StatelessWidget {
-  final List<Widget>? children;
-  final VoidCallback onRefresh;
-  final SwipeRefreshState? initState;
-  final Stream<SwipeRefreshState> stateStream;
-  final Color? indicatorColor;
-  final Color backgroundColor;
-  final double refreshTriggerPullDistance;
-  final double refreshIndicatorExtent;
-  final RefreshControlIndicatorBuilder indicatorBuilder;
-  final SwipeRefreshStyle style;
-  final ScrollController? scrollController;
-  final SliverChildDelegate? childrenDelegate;
-  final EdgeInsets? padding;
-  final bool shrinkWrap;
-  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
-  final ScrollPhysics? physics;
-  final PlatformWrapper _platform;
-
   const SwipeRefresh(
     this.style, {
     required this.stateStream,
@@ -66,12 +48,11 @@ class SwipeRefresh extends StatelessWidget {
     RefreshControlIndicatorBuilder? indicatorBuilder,
     PlatformWrapper? platform,
   })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
-        refreshTriggerPullDistance = refreshTriggerPullDistance ??
-            CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
-        refreshIndicatorExtent = refreshIndicatorExtent ??
-            CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
-        indicatorBuilder = indicatorBuilder ??
-            CupertinoSliverRefreshControl.buildRefreshIndicator,
+        refreshTriggerPullDistance =
+            refreshTriggerPullDistance ?? CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
+        refreshIndicatorExtent =
+            refreshIndicatorExtent ?? CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
+        indicatorBuilder = indicatorBuilder ?? CupertinoSliverRefreshControl.buildRefreshIndicator,
         _platform = platform ?? const PlatformWrapper(),
         super(key: key);
 
@@ -227,6 +208,24 @@ class SwipeRefresh extends StatelessWidget {
     );
   }
 
+  final List<Widget>? children;
+  final VoidCallback onRefresh;
+  final SwipeRefreshState? initState;
+  final Stream<SwipeRefreshState> stateStream;
+  final Color? indicatorColor;
+  final Color backgroundColor;
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
+  final RefreshControlIndicatorBuilder indicatorBuilder;
+  final SwipeRefreshStyle style;
+  final ScrollController? scrollController;
+  final SliverChildDelegate? childrenDelegate;
+  final EdgeInsets? padding;
+  final bool shrinkWrap;
+  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
+  final ScrollPhysics? physics;
+  final PlatformWrapper _platform;
+
   @override
   Widget build(BuildContext context) {
     switch (style) {
@@ -264,23 +263,7 @@ class SwipeRefresh extends StatelessWidget {
         );
       case SwipeRefreshStyle.builder:
       case SwipeRefreshStyle.adaptive:
-        if (_platform.isAndroid) {
-          return MaterialSwipeRefresh(
-            key: key,
-            childrenDelegate: childrenDelegate,
-            stateStream: stateStream,
-            initState: initState,
-            onRefresh: onRefresh,
-            scrollController: scrollController,
-            backgroundColor: backgroundColor,
-            indicatorColor: indicatorColor,
-            shrinkWrap: shrinkWrap,
-            padding: padding,
-            keyboardDismissBehavior: keyboardDismissBehavior,
-            physics: physics,
-            children: children,
-          );
-        } else if (_platform.isIOS) {
+        if (_platform.isCupertino) {
           return CupertinoSwipeRefresh(
             key: key,
             childrenDelegate: childrenDelegate,
@@ -296,9 +279,23 @@ class SwipeRefresh extends StatelessWidget {
             physics: physics,
             children: children,
           );
+        } else {
+          return MaterialSwipeRefresh(
+            key: key,
+            childrenDelegate: childrenDelegate,
+            stateStream: stateStream,
+            initState: initState,
+            onRefresh: onRefresh,
+            scrollController: scrollController,
+            backgroundColor: backgroundColor,
+            indicatorColor: indicatorColor,
+            shrinkWrap: shrinkWrap,
+            padding: padding,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            physics: physics,
+            children: children,
+          );
         }
     }
-
-    return Container();
   }
 }
