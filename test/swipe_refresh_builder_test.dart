@@ -61,7 +61,7 @@ void main() {
       final testWidget = makeTestableWidget(
         SwipeRefresh.builder(
           stateStream: stream,
-          onRefresh:  () {
+          onRefresh: () {
             onRefresh().ignore();
           },
           itemCount: listColors.length,

@@ -127,7 +127,8 @@ void main() {
       );
 
       final findSwipeRefresh = find.byType(SwipeRefresh);
-      final findRefreshProgressIndicator = find.byType(RefreshProgressIndicator);
+      final findRefreshProgressIndicator =
+          find.byType(RefreshProgressIndicator);
 
       await tester.pumpWidget(materialSwipeRefresh);
       await tester.drag(

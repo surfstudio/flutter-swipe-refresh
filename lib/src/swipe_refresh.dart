@@ -48,11 +48,12 @@ class SwipeRefresh extends StatelessWidget {
     RefreshControlIndicatorBuilder? indicatorBuilder,
     PlatformWrapper? platform,
   })  : backgroundColor = backgroundColor ?? const Color(0xFFFFFFFF),
-        refreshTriggerPullDistance =
-            refreshTriggerPullDistance ?? CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
-        refreshIndicatorExtent =
-            refreshIndicatorExtent ?? CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
-        indicatorBuilder = indicatorBuilder ?? CupertinoSliverRefreshControl.buildRefreshIndicator,
+        refreshTriggerPullDistance = refreshTriggerPullDistance ??
+            CupertinoSwipeRefresh.defaultRefreshTriggerPullDistance,
+        refreshIndicatorExtent = refreshIndicatorExtent ??
+            CupertinoSwipeRefresh.defaultRefreshIndicatorExtent,
+        indicatorBuilder = indicatorBuilder ??
+            CupertinoSliverRefreshControl.buildRefreshIndicator,
         _platform = platform ?? const PlatformWrapper(),
         super(key: key);
 

@@ -131,7 +131,6 @@ class _ExampleBodyWidget extends StatelessWidget {
 
   final SwipeRefreshStyle style;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -139,7 +138,9 @@ class _ExampleBodyWidget extends StatelessWidget {
       height: 100,
       child: Center(
         child: Text(
-          style == SwipeRefreshStyle.material ? 'Material example' : 'Cupertino example',
+          style == SwipeRefreshStyle.material
+              ? 'Material example'
+              : 'Cupertino example',
           style: const TextStyle(color: white),
         ),
       ),

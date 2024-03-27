@@ -54,7 +54,8 @@ abstract class SwipeRefreshBase extends StatefulWidget {
   SwipeRefreshBaseState createState();
 }
 
-abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase> extends State<T> {
+abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase>
+    extends State<T> {
   @protected
   final GlobalKey refreshKey = GlobalKey();
 
@@ -79,7 +80,7 @@ abstract class SwipeRefreshBaseState<T extends SwipeRefreshBase> extends State<T
     }
 
     _stateSubscription = widget.stateStream.listen(_updateState);
-    scrollBehavior =  _getScrollBehavior();
+    scrollBehavior = _getScrollBehavior();
   }
 
   void _updateState(SwipeRefreshState newState) {

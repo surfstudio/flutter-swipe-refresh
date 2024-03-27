@@ -83,7 +83,8 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
   SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState();
 }
 
-class _CupertinoSwipeRefreshState extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
+class _CupertinoSwipeRefreshState
+    extends SwipeRefreshBaseState<CupertinoSwipeRefresh> {
   late final ScrollController _scrollController;
 
   @override
@@ -102,8 +103,8 @@ class _CupertinoSwipeRefreshState extends SwipeRefreshBaseState<CupertinoSwipeRe
       shrinkWrap: widget.shrinkWrap,
       controller: _scrollController,
       scrollBehavior: scrollBehavior,
-      keyboardDismissBehavior:
-          widget.keyboardDismissBehavior ?? ScrollViewKeyboardDismissBehavior.onDrag,
+      keyboardDismissBehavior: widget.keyboardDismissBehavior ??
+          ScrollViewKeyboardDismissBehavior.onDrag,
       physics: widget.physics == null
           ? const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
