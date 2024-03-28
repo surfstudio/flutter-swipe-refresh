@@ -61,6 +61,7 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
     Key? key,
+    this.cacheExtent,
   })  : backgroundColor = backgroundColor ?? Colors.white,
         super(
           key: key,
@@ -78,6 +79,7 @@ class MaterialSwipeRefresh extends SwipeRefreshBase {
 
   final Color? indicatorColor;
   final Color backgroundColor;
+  final double? cacheExtent;
 
   @override
   SwipeRefreshBaseState createState() => _MaterialSwipeRefreshState();
@@ -114,6 +116,7 @@ class _MaterialSwipeRefreshState
             ? ListView(
                 shrinkWrap: widget.shrinkWrap,
                 padding: widget.padding,
+                cacheExtent: widget.cacheExtent,
                 controller: _scrollController,
                 physics: AlwaysScrollableScrollPhysics(parent: widget.physics),
                 keyboardDismissBehavior: widget.keyboardDismissBehavior ??
@@ -123,6 +126,7 @@ class _MaterialSwipeRefreshState
             : ListView.custom(
                 shrinkWrap: widget.shrinkWrap,
                 padding: widget.padding,
+                cacheExtent: widget.cacheExtent,
                 childrenDelegate: widget.childrenDelegate!,
                 controller: _scrollController,
                 keyboardDismissBehavior: widget.keyboardDismissBehavior ??

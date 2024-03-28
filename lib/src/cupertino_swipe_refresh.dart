@@ -58,6 +58,7 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
     ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior,
     ScrollPhysics? physics,
     Key? key,
+    this.cacheExtent,
   }) : super(
           key: key,
           children: children,
@@ -78,6 +79,7 @@ class CupertinoSwipeRefresh extends SwipeRefreshBase {
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
   final RefreshControlIndicatorBuilder indicatorBuilder;
+  final double? cacheExtent;
 
   @override
   SwipeRefreshBaseState createState() => _CupertinoSwipeRefreshState();
@@ -105,6 +107,7 @@ class _CupertinoSwipeRefreshState
       scrollBehavior: scrollBehavior,
       keyboardDismissBehavior: widget.keyboardDismissBehavior ??
           ScrollViewKeyboardDismissBehavior.onDrag,
+      cacheExtent: widget.cacheExtent,
       physics: widget.physics == null
           ? const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
