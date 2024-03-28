@@ -2,7 +2,7 @@
 
 ## 1.1.0
 * Added support for all TargetPlatform.
-* Added cacheExtent property
+* Added cacheExtent property.
 * SDK version is up.
 
 ## 1.0.2
