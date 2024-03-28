@@ -15,6 +15,11 @@ This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) t
 
 Widget for refresh by swipe.
 
+- :1234: Enabled on every platform - the package is fully written on Flutter side and enabled on every platform.
+- :recycle: Fully covered by tests - guaranteeing the result and expectations from this package.
+- :notebook_with_decorative_cover: End-to-end documentation - every aspect of implementation is documented, so there is full understanding.
+- :cow2: Support from the best Flutter experts - we are open to any enhancement ideas and contributions.
+
 ![](https://i.ibb.co/7Kmy91f/material.gif)
 ![](https://i.ibb.co/smPxRp7/cupertino.gif)
 
