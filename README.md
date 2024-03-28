@@ -1,6 +1,6 @@
 # Swipe Refresh
 
-[![Build Status](https://shields.io/github/workflow/status/surfstudio/flutter-swipe-refresh/Analysis?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
+[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-swipe-refresh/main.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
 [![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-swipe-refresh?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-swipe-refresh)
 [![Pub Version](https://img.shields.io/pub/v/swipe_refresh?logo=dart&logoColor=white)](https://pub.dev/packages/swipe_refresh)
 [![Pub Likes](https://badgen.net/pub/likes/swipe_refresh)](https://pub.dev/packages/swipe_refresh)
