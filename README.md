@@ -11,7 +11,7 @@ This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) t
 
 [![Swipe Refresh](https://i.ibb.co/wCbKCy6/Swipe-Refresh.png)](https://github.com/surfstudio/SurfGear)
 
-## Description
+## Overview
 
 Widget for refresh by swipe.
 
@@ -20,8 +20,8 @@ Widget for refresh by swipe.
 - :notebook_with_decorative_cover: End-to-end documentation - every aspect of implementation is documented, so there is full understanding.
 - :cow2: Support from the best Flutter experts - we are open to any enhancement ideas and contributions.
 
-![](https://i.ibb.co/7Kmy91f/material.gif)
-![](https://i.ibb.co/smPxRp7/cupertino.gif)
+![material](https://i.ibb.co/7Kmy91f/material.gif)
+![cupertino](https://i.ibb.co/smPxRp7/cupertino.gif)
 
 Main classes:
 
