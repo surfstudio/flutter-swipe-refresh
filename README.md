@@ -12,10 +12,6 @@
 [![Pub popularity](https://badgen.net/pub/popularity/swipe_refresh)](https://pub.dev/packages/swipe_refresh/score)
 ![Flutter Platform](https://badgen.net/pub/flutter-platform/swipe_refresh)
 
-This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
-
-[![Swipe Refresh](https://i.ibb.co/wCbKCy6/Swipe-Refresh.png)](https://github.com/surfstudio/SurfGear)
-
 ## Overview
 
 Widget for refresh by swipe.
