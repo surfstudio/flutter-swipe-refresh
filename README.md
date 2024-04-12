@@ -1,15 +1,16 @@
 # Swipe Refresh
 
-[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-swipe-refresh/main.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/surfstudio/flutter-open-source/blob/887525c23f4d57a2d96fc2e6a31e15d1e29d1787/assets/logo_white.png">
+  <img alt="Shows an illustrated sun in light color mode and a moon with stars in dark color mode." src="https://github.com/surfstudio/flutter-open-source/blob/887525c23f4d57a2d96fc2e6a31e15d1e29d1787/assets/logo_black.png" width ="200">
+</picture>
+
+[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-swipe-refresh/on_pull_request.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-swipe-refresh)
 [![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-swipe-refresh?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-swipe-refresh)
 [![Pub Version](https://img.shields.io/pub/v/swipe_refresh?logo=dart&logoColor=white)](https://pub.dev/packages/swipe_refresh)
 [![Pub Likes](https://badgen.net/pub/likes/swipe_refresh)](https://pub.dev/packages/swipe_refresh)
 [![Pub popularity](https://badgen.net/pub/popularity/swipe_refresh)](https://pub.dev/packages/swipe_refresh/score)
 ![Flutter Platform](https://badgen.net/pub/flutter-platform/swipe_refresh)
-
-This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
-
-[![Swipe Refresh](https://i.ibb.co/wCbKCy6/Swipe-Refresh.png)](https://github.com/surfstudio/SurfGear)
 
 ## Overview
 
