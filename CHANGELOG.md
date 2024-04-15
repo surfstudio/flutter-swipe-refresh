@@ -1,6 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+* Rebranding.
+
 ## 1.1.0
+
 * Added support for all TargetPlatform.
 * Added cacheExtent property.
 * SDK version is up.
