@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+* Correct logo position.
+
 ## 1.1.1
 
 * Rebranding.
